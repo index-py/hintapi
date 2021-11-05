@@ -1,0 +1,53 @@
+name: Documents
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: pdm-project/setup-pdm@v2.1
+        name: Setup Python and PDM
+        with:
+          python-version: 3.7
+          architecture: x64
+          version: 1.9.0
+          enable-pep582: true # Enable PEP 582 package loading globally
+
+      - name: Install dependencies
+        run: |
+          pdm install -dG docs
+          pip install mkdocs-version
+      - name: Generate document
+        run: |
+          export PATH=$PATH:$(pdm info --packages)/bin
+          git fetch --tags
+          mkdocs-version build --minor --version-regex="v(?P<version>.*)"
+          echo "hintapi.aber.sh" > CNAME
+      - name: Push document to branch `gh-pages`
+        run: |
+          cd site
+
+          git init
+          remote_repo="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git config http.sslVerify false
+          git config user.name "Automated Publisher"
+          git config user.email "actions@users.noreply.github.com"
+          git remote add publisher "${remote_repo}"
+
+          # install lfs hooks
+          git lfs install
+
+          # publish any new files
+          git checkout -b gh-pages
+          git add -A
+          timestamp=$(date -u)
+          git commit -m "Automated publish: ${timestamp} ${GITHUB_SHA}" || exit 0
+          git push --force publisher gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
