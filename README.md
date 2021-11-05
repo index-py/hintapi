@@ -9,19 +9,14 @@
 </p>
 
 <p>
-<a href="https://github.com/abersheeran/hintapi/actions?query=workflow%3ATest">
-<img src="https://github.com/abersheeran/hintapi/workflows/Test/badge.svg" alt="Github Action Test" />
+<a href="https://github.com/abersheeran/hintapi/actions?query=workflow%3ACI">
+<img src="https://github.com/abersheeran/hintapi/workflows/CI/badge.svg" alt="Github Action Test" />
 </a>
 
 <a href="https://app.codecov.io/gh/abersheeran/hintapi/">
 <img alt="Codecov" src="https://img.shields.io/codecov/c/github/abersheeran/hintapi">
 </a>
 </p>
-
-<p>
-<a href="https://github.com/abersheeran/hintapi/actions?query=workflow%3A%22Publish+PyPi%22">
-<img src="https://github.com/abersheeran/hintapi/workflows/Publish%20PyPi/badge.svg" alt="Publish PyPi" />
-</a>
 
 <a href="https://pypi.org/project/hintapi/">
 <img src="https://img.shields.io/pypi/v/hintapi" alt="PyPI" />
