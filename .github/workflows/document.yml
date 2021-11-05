@@ -28,7 +28,7 @@ jobs:
           export PATH=$PATH:$(pdm info --packages)/bin
           git fetch --tags
           mkdocs-version build --minor --version-regex="v(?P<version>.*)"
-          echo "hintapi.aber.sh" > CNAME
+          echo "hintapi.aber.sh" > site/CNAME
       - name: Push document to branch `gh-pages`
         run: |
           cd site
