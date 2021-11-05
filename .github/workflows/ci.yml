@@ -41,7 +41,7 @@ jobs:
           version: 1.9.0
           enable-pep582: true # Enable PEP 582 package loading globally
       - name: Install dependencies
-        run: pdm install -v -dG dev -dG test --no-self
+        run: pdm install -v -dG dev -dG tests --no-self
       - name: Static type and format checking
         run: python script/check.py
       - name: Tests
