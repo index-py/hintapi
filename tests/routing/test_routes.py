@@ -1,7 +1,7 @@
 def test_decorator():
-    from hintapi import hintapi
+    from hintapi import HintAPI
 
-    app = hintapi()
+    app = HintAPI()
 
     @app.router.http("/hello", name="hello")
     def hello():
@@ -20,9 +20,9 @@ def test_decorator():
 
 
 def test_decorator_required_method():
-    from hintapi import hintapi
+    from hintapi import HintAPI
 
-    app = hintapi()
+    app = HintAPI()
 
     @app.router.http.get("/get")
     def need_get():
@@ -52,10 +52,10 @@ def test_decorator_required_method():
 
 
 def test_lshift():
-    from hintapi import hintapi
+    from hintapi import HintAPI
     from hintapi.routing import HttpRoute, SocketRoute
 
-    app = hintapi()
+    app = HintAPI()
 
     def hello():
         return "hello world"
@@ -78,9 +78,9 @@ def test_lshift():
 
 
 def test_url_for():
-    from hintapi import hintapi
+    from hintapi import HintAPI
 
-    app = hintapi()
+    app = HintAPI()
 
     @app.router.http("/hello", name="hello")
     @app.router.http("/hello/{name}", name="hello-with-name")
@@ -146,9 +146,9 @@ def test_routes_operator():
 
 
 def test_empty_path():
-    from hintapi import hintapi
+    from hintapi import HintAPI
 
-    app = hintapi()
+    app = HintAPI()
 
     @app.router.http("")
     def homepage():

@@ -5,9 +5,9 @@ from httpx import Client
 
 
 def test_application():
-    from hintapi import hintapi
+    from hintapi import HintAPI
 
-    app = hintapi()
+    app = HintAPI()
     with pytest.raises(RuntimeError):
         app.debug = True
 
@@ -50,7 +50,7 @@ def test_custom_application_response_converter():
     from dataclasses import asdict, dataclass
     from typing import Mapping
 
-    from hintapi import HttpResponse, JSONResponse, PlainTextResponse, hintapi
+    from hintapi import HttpResponse, JSONResponse, PlainTextResponse, HintAPI
 
     @dataclass
     class Error:
@@ -58,7 +58,7 @@ def test_custom_application_response_converter():
         title: str = ""
         message: str = ""
 
-    app = hintapi(
+    app = HintAPI(
         response_converters={
             Error: lambda error, status=400, headers=None: JSONResponse(
                 asdict(error), status, headers

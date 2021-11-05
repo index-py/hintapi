@@ -71,11 +71,12 @@ def test_cookie():
     def cookie(name: Annotated[str, Cookie()]):
         return name
 
-    with Client(app=app, base_url="http://localhost") as client:
-        resp = client.get("/", cookies={"name": "aber"})
+    with Client(app=app, base_url="http://localhost", cookies={"name": "aber"}) as client:
+        resp = client.get("/")
         assert resp.text == "aber"
 
-        resp = client.get("/", cookies={"name0": "aber"})
+    with Client(app=app, base_url="http://localhost", cookies={"name0": "aber"}) as client:
+        resp = client.get("/")
         assert resp.status_code == 422
 
     assert not inspect.signature(app.router.search("http", "/")[1]).parameters
@@ -187,11 +188,12 @@ def test_middleware():
     def cookie(name: str = Cookie()):
         return name
 
-    with Client(app=app, base_url="http://localhost") as client:
-        resp = client.get("/", cookies={"name": "aber"})
+    with Client(app=app, base_url="http://localhost", cookies={"name": "aber"}) as client:
+        resp = client.get("/")
         assert resp.status_code == 422
 
-        resp = client.get("/?query=123", cookies={"name": "aber"})
+    with Client(app=app, base_url="http://localhost", cookies={"name": "aber"}) as client:
+        resp = client.get("/?query=123")
         assert resp.text == "aber"
 
     assert not inspect.signature(app.router.search("http", "/")[1]).parameters

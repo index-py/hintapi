@@ -34,7 +34,7 @@ def test_routes():
 
 
 def test_mulitmethodroutes():
-    from hintapi import hintapi
+    from hintapi import HintAPI
 
     routes = Routes()
 
@@ -50,7 +50,7 @@ def test_mulitmethodroutes():
     def delete_user():
         pass
 
-    app = hintapi(routes=routes)
+    app = HintAPI(routes=routes)
 
     endpoint = app.router.search("http", "/user")[1]
     assert issubclass(endpoint, routes.base_class)
@@ -63,7 +63,7 @@ def test_mulitmethodroutes():
 
 
 def test_mulitmethodroutes_with_prefix():
-    from hintapi import hintapi
+    from hintapi import HintAPI
 
     routes = Routes()
 
@@ -79,7 +79,7 @@ def test_mulitmethodroutes_with_prefix():
     def delete_user():
         pass
 
-    app = hintapi(routes="/api" // routes)
+    app = HintAPI(routes="/api" // routes)
 
     endpoint = app.router.search("http", "/api/user")[1]
     assert issubclass(endpoint, routes.base_class)
@@ -92,7 +92,7 @@ def test_mulitmethodroutes_with_prefix():
 
 
 def test_mulitmethodroutes_with_parameters():
-    from hintapi import Path, hintapi
+    from hintapi import Path, HintAPI
 
     routes = Routes()
 
@@ -104,7 +104,7 @@ def test_mulitmethodroutes_with_parameters():
     def name(name: str = Path(...)):
         return name
 
-    app = hintapi(routes=routes)
+    app = HintAPI(routes=routes)
 
     with Client(app=app, base_url="http://localhost") as client:
         resp = client.get("/aber")
