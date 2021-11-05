@@ -316,7 +316,7 @@ def return_redirect():
 
 ### StreamResponse
 
-接受一个异步生成器，流式传输响应主体。
+接受一个生成器，流式传输响应主体。
 
 ```python
 import time
@@ -339,7 +339,7 @@ def return_stream(scope, receive, send):
 
 ### FileResponse
 
-异步传输文件作为响应。
+传输文件作为响应。
 
 与其他响应类型相比，它采用不同的参数进行实例化：
 
@@ -381,7 +381,7 @@ def homepage():
 
 通过 `SendEventResponse` 可以返回一个 [Server-sent Events](https://developer.mozilla.org/zh-CN/docs/Server-sent_events/Using_server-sent_events) 响应，这是一种 HTTP 长连接响应，可应用于服务器实时推送数据到客户端等场景。
 
-`SendEventResponse` 除了可以接受诸如 `status_code`、`headers` 等常规参数外，还需要自行传入一个用于生成消息的异步生成器。传入的异步生成器 `yield` 的每一条消息都需要为合规的 Server-Sent Event 消息（`hintapi.ServerSentEvent` 类型）。
+`SendEventResponse` 除了可以接受诸如 `status_code`、`headers` 等常规参数外，还需要自行传入一个用于生成消息的生成器。传入的生成器 `yield` 的每一条消息都需要为合规的 Server-Sent Event 消息（`hintapi.ServerSentEvent` 类型）。
 
 如下是一个每隔一秒发送一条 hello 消息、一共发送一百零一条消息的样例。
 
