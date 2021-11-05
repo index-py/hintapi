@@ -52,6 +52,7 @@ jobs:
           files: ./coverage.xml
           directory: ./coverage/reports/
           verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   publish:
     needs: tests
