@@ -1,6 +1,6 @@
 import pytest
 
-from typedweb.openapi.extra_docs import merge_openapi_info
+from hintapi.openapi.extra_docs import merge_openapi_info
 
 
 @pytest.mark.parametrize(

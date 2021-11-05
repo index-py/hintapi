@@ -1,15 +1,14 @@
-import pytest
 from httpx import Client
 
-from typedweb.middlewares import CORSMiddleware
+from hintapi.middlewares import CORSMiddleware
 
 
 def test_cors():
     cors_middleware = CORSMiddleware()
 
-    from typedweb import HttpRoute, TypedWeb
+    from hintapi import HintAPI, HttpRoute
 
-    app = TypedWeb()
+    app = HintAPI()
 
     def homepage():
         return "homepage"

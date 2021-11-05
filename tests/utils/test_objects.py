@@ -1,4 +1,4 @@
-from typedweb.utils.objects import Singleton
+from hintapi.utils.objects import Singleton
 
 
 def test_singleton():

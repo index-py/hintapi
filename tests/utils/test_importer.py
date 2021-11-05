@@ -1,4 +1,4 @@
-from typedweb.utils.importer import import_module
+from hintapi.utils.importer import import_module
 
 
 def test_import_module():

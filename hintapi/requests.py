@@ -4,15 +4,15 @@ import typing
 from contextvars import ContextVar
 from http import HTTPStatus
 
-from baize.wsgi import HTTPConnection as BaiZeHTTPConnection
-from baize.wsgi import Request as BaiZeRequest
 from baize.datastructures import ContentType
 from baize.exceptions import HTTPException
 from baize.utils import cached_property
+from baize.wsgi import HTTPConnection as BaiZeHTTPConnection
+from baize.wsgi import Request as BaiZeRequest
 from typing_extensions import Annotated
 
 if typing.TYPE_CHECKING:
-    from .applications import typedweb
+    from .applications import HintAPI
 
 from .utils import State, bind_contextvar
 
@@ -30,7 +30,7 @@ class HTTPConnection(BaiZeHTTPConnection, typing.MutableMapping[str, typing.Any]
         return State(self._environ["state"])
 
     @cached_property
-    def app(self) -> typedweb:
+    def app(self) -> HintAPI:
         return self["app"]  # type: ignore
 
 

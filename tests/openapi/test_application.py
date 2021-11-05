@@ -2,27 +2,26 @@ import json
 from http import HTTPStatus
 from typing import Any, List
 
-import pytest
 from httpx import Client
 from pydantic import BaseModel
 from typing_extensions import Annotated
 
-from typedweb import (
+from hintapi import (
     Header,
+    HintAPI,
     HTMLResponse,
     HttpRoute,
     HttpView,
-    TypedWeb,
     JSONResponse,
     Path,
     Routes,
     required_method,
 )
-from typedweb.openapi.application import OpenAPI
+from hintapi.openapi.application import OpenAPI
 
 
 def test_openapi_page():
-    app = TypedWeb()
+    app = HintAPI()
     openapi = OpenAPI()
     app.router << Routes("/docs" // openapi.routes, namespace="docs")
     assert app.router.url_for("docs:json_docs") == "/docs/json"
@@ -100,7 +99,7 @@ def test_openapi_page():
     openapi_docs_text = response.text
     assert json.loads(openapi_docs_text) == {
         "openapi": "3.0.3",
-        "info": {"title": "typedweb API", "version": "1.0.0"},
+        "info": {"title": "hintapi API", "version": "1.0.0"},
         "paths": {
             "/hello": {
                 "get": {
@@ -333,7 +332,7 @@ def test_openapi_page():
 
 
 def test_openapi_single_function_summary_and_description():
-    app = TypedWeb()
+    app = HintAPI()
     openapi = OpenAPI()
     app.router << "/docs" // openapi.routes
 
@@ -376,7 +375,7 @@ def test_openapi_single_function_summary_and_description():
 
 
 def test_openapi_single_function_tags():
-    app = TypedWeb()
+    app = HintAPI()
     openapi = OpenAPI()
     app.router << "/docs" // openapi.routes
 
@@ -391,7 +390,7 @@ def test_openapi_single_function_tags():
 
 
 def test_openapi_routes_tags():
-    app = TypedWeb()
+    app = HintAPI()
     openapi = OpenAPI()
     app.router << "/docs" // openapi.routes
 

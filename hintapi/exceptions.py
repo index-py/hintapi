@@ -15,8 +15,9 @@ from typing import (
     TypeVar,
     Union,
 )
-from baize.typing import Environ, StartResponse, WSGIApp
+
 from baize.exceptions import HTTPException
+from baize.typing import Environ, StartResponse, WSGIApp
 from pydantic import ValidationError
 from pydantic.json import pydantic_encoder
 from typing_extensions import Literal

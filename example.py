@@ -3,16 +3,16 @@ from pathlib import Path as FilePath
 
 from typing_extensions import Annotated
 
-from typedweb import HTTPException, HttpRoute, TypedWeb, required_method
-from typedweb.parameters.field_functions import Path
-from typedweb.openapi import OpenAPI
+from hintapi import HTTPException, HttpRoute, HintAPI, required_method
+from hintapi.parameters.field_functions import Path
+from hintapi.openapi import OpenAPI
 
 
 def homepage():
     """
     Homepage
     """
-    return "hello, typedweb"
+    return "hello, hintapi"
 
 
 def exc():
@@ -45,7 +45,7 @@ def sources(filepath: Annotated[str, Path()]):
         raise HTTPException(404)
 
 
-app = TypedWeb(
+app = HintAPI(
     debug=True,
     routes=[
         HttpRoute("/", homepage),

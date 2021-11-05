@@ -14,7 +14,7 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple, TypeVar
 from typing_extensions import Literal, TypedDict
 
 if typing.TYPE_CHECKING:
-    from ..applications import typedweb
+    from ..applications import HintAPI
     from ..requests import HttpRequest
 
 from ..exceptions import RequestValidationError
@@ -37,7 +37,7 @@ class TagDetail(TagDetailOptional):
 class OpenAPI:
     def __init__(
         self,
-        info: spec.Info = {"title": "typedweb API", "version": "1.0.0"},
+        info: spec.Info = {"title": "hintapi API", "version": "1.0.0"},
         security_schemes: Dict[str, spec.SecurityScheme | spec.Reference] = {},
         *,
         tags: Dict[str, TagDetail] = {},
@@ -71,7 +71,7 @@ class OpenAPI:
                 self.path2tag.setdefault(path, []).append(tag_name)
         self.definitions: dict = {}
 
-    def _generate_paths(self, app: Index) -> Tuple[spec.Paths, dict]:
+    def _generate_paths(self, app: HintAPI) -> Tuple[spec.Paths, dict]:
         _definitions: dict = {}
         update_definitions = lambda path_item, x: _definitions.update(x) or path_item
         return {

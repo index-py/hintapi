@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import functools
 import inspect
-from contextlib import _GeneratorContextManager, asynccontextmanager, contextmanager
+from contextlib import contextmanager
 from itertools import groupby
 from typing import (
     Any,

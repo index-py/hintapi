@@ -18,7 +18,7 @@ from typing import (
 )
 
 from baize.datastructures import URL
-from baize.typing import WSGIApp, Environ, StartResponse
+from baize.typing import Environ, StartResponse, WSGIApp
 
 from .debug import DebugMiddleware
 from .exceptions import ErrorView, ExceptionMiddleware, HTTPException
@@ -42,7 +42,7 @@ class FactoryClass:
     http: Type[HttpRequest] = HttpRequest
 
 
-class TypedWeb:
+class HintAPI:
     debug: ImmutableAttribute[bool] = ImmutableAttribute()
     state: ImmutableAttribute[State] = ImmutableAttribute()
 

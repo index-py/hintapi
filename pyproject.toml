@@ -11,21 +11,21 @@ dependencies = ["baize<1.0.0,>=0.13.0", "pydantic<2.0,>=1.8", "typing-extensions
 description = ""
 dynamic = ["classifiers", "classifiers"]
 license = {text = "Apache-2.0"}
-name = "typedweb"
+name = "hintapi"
 readme = "README.md"
 requires-python = ">=3.7"
 version = "0.1.0"
 
 [project.urls]
-documentation = "https://typedweb.abersheeran.com/"
-homepage = "https://github.com/abersheeran/typedweb"
-repository = "https://github.com/abersheeran/typedweb"
+documentation = "https://hintapi.abersheeran.com/"
+homepage = "https://github.com/abersheeran/hintapi"
+repository = "https://github.com/abersheeran/hintapi"
 
 [project.optional-dependencies]
 cli = ["click<9.0,>=8.0"]
 
 [project.scripts]
-index-cli = "typedweb.cli:index_cli"
+index-cli = "hintapi.cli:index_cli"
 
 [tool.isort]
 profile = "black"
@@ -34,9 +34,9 @@ profile = "black"
 omit = [
   "*/.venv/*",
   "*/tests/*",
-  "typedweb/status.py",
-  "typedweb/cli.py",
-  "typedweb/routing/commands.py",
+  "hintapi/status.py",
+  "hintapi/cli.py",
+  "hintapi/routing/commands.py",
 ]
 
 [tool.coverage.report]
@@ -54,7 +54,7 @@ show_missing = true
 skip_covered = true
 
 [tool.pdm]
-includes = ["typedweb"]
+includes = ["hintapi"]
 
 [tool.pdm.dev-dependencies]
 dev = [
@@ -70,9 +70,9 @@ docs = [
   "mkdocs-static-i18n<1.0,>=0.16",
 ]
 tests = [
-    "pytest<7.0.0,>=6.2.5",
-    "pytest-cov<3.0.0,>=2.8.1",
-    "httpx~=0.20",
+  "pytest<7.0.0,>=6.2.5",
+  "pytest-cov<3.0.0,>=2.8.1",
+  "httpx~=0.20",
 ]
 
 [build-system]

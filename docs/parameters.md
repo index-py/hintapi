@@ -1,15 +1,15 @@
-typedweb 使用 [pydantic](https://pydantic-docs.helpmanual.io/) 用于更轻松的解析 HTTP 请求信息，并为之绑定了一套生成 OpenAPI 文档的程序。
+hintapi 使用 [pydantic](https://pydantic-docs.helpmanual.io/) 用于更轻松的解析 HTTP 请求信息，并为之绑定了一套生成 OpenAPI 文档的程序。
 
 ## 显示 OpenAPI 文档
 
-将 `typedweb.openapi.application.OpenAPI` 挂载进 typedweb 中。启动 index，访问你服务上 `/docs/` 即可看到生成的文档。
+将 `hintapi.openapi.application.OpenAPI` 挂载进 hintapi 中。启动 index，访问你服务上 `/docs/` 即可看到生成的文档。
 
 !!! tip ""
     如果你不需要生成文档，仅仅只需要自动校验参数功能，这一步可以跳过。
 
 ```python
-from typedweb import Index
-from typedweb.openapi import OpenAPI
+from hintapi import Index
+from hintapi.openapi import OpenAPI
 
 app = Index()
 
@@ -22,7 +22,7 @@ app.router << ("/docs" // OpenAPI().routes)
 
 ### API Tags
 
-OpenAPI 的 Tags 是一个有用的功能，在 typedweb 里，你可以通过如下方式来指定 URL 的分类标签。
+OpenAPI 的 Tags 是一个有用的功能，在 hintapi 里，你可以通过如下方式来指定 URL 的分类标签。
 
 `tags` 参数必须是一个 `dict` 类型，键为标签名。值需要包含 `description`，用于描述此标签；`paths` 是 URL 列表，如果 URL 包含路径参数，直接使用不带 `:type` 的字符串即可。
 
@@ -45,7 +45,7 @@ OpenAPI(
 你也可以在使用[装饰器注册](./route.md)时，给装饰器传入 `tags` 参数，如下。虽然这种方式没办法为 `tag` 增加 `description`，但它可以与上述用法同时使用——换句话来说，你可以在 `OpenAPI` 的 `tags` 里定义 `tag` 的信息，再在装饰器里传入对应的 `tag` 名称。
 
 ```python
-from typedweb import Routes
+from hintapi import Routes
 
 routes = Routes()
 
@@ -62,7 +62,7 @@ async def handler():
 例如：
 
 ```python
-from typedweb import HTTPView
+from hintapi import HTTPView
 
 
 async def handler():
@@ -89,7 +89,7 @@ class ClassHandler(HTTPView):
 你也可以在使用[装饰器注册](./route.md)时，给装饰器传入参数，如下。
 
 ```python
-from typedweb import Routes
+from hintapi import Routes
 
 routes = Routes()
 
@@ -102,7 +102,7 @@ async def handler():
 如果你的 description 很长，也可以只给装饰器传入 `summary` 参数，`description` 将自动使用整个 `__doc__`。
 
 ```python
-from typedweb import Routes
+from hintapi import Routes
 
 routes = Routes()
 
@@ -127,7 +127,7 @@ async def handler():
 
 ```python
 from typing_extensions import Annotated
-from typedweb import Query
+from hintapi import Query
 
 
 async def getlist(
@@ -141,7 +141,7 @@ async def getlist(
 
 ```python
 from typing_extensions import Annotated
-from typedweb import Query
+from hintapi import Query
 from pydantic import BaseModel
 
 
@@ -202,7 +202,7 @@ async def get_user(db: Annotated[Connection, Depends(get_db_connection)]):
 
 ### 修改 Content-Type
 
-typedweb 会自动读取 `request.data` 的函数签名，并读取其中包含的 `ContentType` 对象作为 Content-Type 生成 OpenAPI 文档。以下为一个简单自定义样例——使用 `msgpack` 解析数据：
+hintapi 会自动读取 `request.data` 的函数签名，并读取其中包含的 `ContentType` 对象作为 Content-Type 生成 OpenAPI 文档。以下为一个简单自定义样例——使用 `msgpack` 解析数据：
 
 ```python
 import typing
@@ -211,9 +211,9 @@ from http import HTTPStatus
 import msgpack
 from typing_extensions import Annotated
 
-from typedweb import Index
-from typedweb.applications import FactoryClass
-from typedweb.requests import HttpRequest
+from hintapi import Index
+from hintapi.applications import FactoryClass
+from hintapi.requests import HttpRequest
 
 
 class MsgPackRequest(HttpRequest):
@@ -238,7 +238,7 @@ app = Index(factory_class=FactoryClass(http=MsgPackRequest))
 
 ```python
 from typing_extensions import Annotated
-from typedweb import Request
+from hintapi import Request
 from yourmodule import User
 
 
@@ -250,7 +250,7 @@ async def code(user: Annotated[User, Request()]):
 
 ```python
 from typing_extensions import Annotated
-from typedweb import Request
+from hintapi import Request
 
 
 async def code(username: Annotated[str, Request(alias="user.name")]):
@@ -279,7 +279,7 @@ def required_auth(endpoint):
 
 ```python
 from typing_extensions import Annotated
-from typedweb import Index, JSONResponse
+from hintapi import Index, JSONResponse
 
 app = Index()
 
@@ -296,7 +296,7 @@ async def hello() -> Annotated[Any, JSONResponse[200, {}, List[str]]]:
 
 ```python
 from typing_extensions import Annotated
-from typedweb import Index, JSONResponse
+from hintapi import Index, JSONResponse
 
 app = Index()
 
@@ -359,7 +359,7 @@ def required_auth(endpoint):
 !!! tip ""
     具体的字段可参考 [OpenAPI Specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#operationObject)。
 
-例如你可以使用它来描述 typedweb 并不自带的 `security`：
+例如你可以使用它来描述 hintapi 并不自带的 `security`：
 
 ```python
 from typing_extensions import Annotated

@@ -7,7 +7,7 @@
 使用函数处理请求是很简单的。
 
 ```python
-from typedweb import Index
+from hintapi import Index
 
 app = Index()
 
@@ -20,7 +20,7 @@ async def hello():
 `@app.router.http` 装饰器将返回原始的函数，故而可以将同一个函数注册到多个路由下。
 
 ```python
-from typedweb import Index, request
+from hintapi import Index, request
 
 app = Index()
 
@@ -36,7 +36,7 @@ async def hello():
 你还可以使用 `required_method` 来约束函数处理器仅接受指定的请求方法。
 
 ```python
-from typedweb import Index, request, required_method
+from hintapi import Index, request, required_method
 
 app = Index()
 
@@ -61,7 +61,7 @@ async def need_post():
     在继承类时覆盖类属性 `HTTP_METHOD_NAMES` 即可。
 
 ```python
-from typedweb import Index, request, HttpView
+from hintapi import Index, request, HttpView
 
 app = Index()
 
@@ -87,9 +87,9 @@ class Cat(HttpView):
 
 ## 获取请求值
 
-使用 `from typedweb import request` 语句获取全局变量 `request`，它是一个代理对象，可以读写删当前请求对应的 `Request` 对象的各个属性。一般来说这足以应付大部分需求，但如果你真的需要访问原始 `Request` 对象，可以使用 `typedweb.requests.request_var.get()`。
+使用 `from hintapi import request` 语句获取全局变量 `request`，它是一个代理对象，可以读写删当前请求对应的 `Request` 对象的各个属性。一般来说这足以应付大部分需求，但如果你真的需要访问原始 `Request` 对象，可以使用 `hintapi.requests.request_var.get()`。
 
-以下是 `typedweb.requests.Request` 对象的常用属性与方法。
+以下是 `hintapi.requests.Request` 对象的常用属性与方法。
 
 ### Method
 
@@ -244,7 +244,7 @@ del request.state.user  # 删
 接受 `str` 或 `bytes` 并返回纯文本响应。
 
 ```python
-from typedweb import PlainTextResponse
+from hintapi import PlainTextResponse
 
 
 async def return_plaintext():
@@ -256,7 +256,7 @@ async def return_plaintext():
 接受 `str` 或 `bytes` 并返回 HTML 响应。
 
 ```python
-from typedweb import HTMLResponse
+from hintapi import HTMLResponse
 
 
 async def return_html():
@@ -268,7 +268,7 @@ async def return_html():
 接受一些 Python 对象并返回一个 `application/json` 编码的响应。
 
 ```python
-from typedweb import JSONResponse
+from hintapi import JSONResponse
 
 
 async def return_json():
@@ -282,7 +282,7 @@ import json
 import decimal
 import datetime
 
-from typedweb import JSONResponse
+from hintapi import JSONResponse
 
 
 def custom_convert(obj):
@@ -307,7 +307,7 @@ async def return_json():
 返回 HTTP 重定向。默认情况下使用 307 状态代码。
 
 ```python
-from typedweb import RedirectResponse
+from hintapi import RedirectResponse
 
 
 async def return_redirect():
@@ -321,7 +321,7 @@ async def return_redirect():
 ```python
 import asyncio
 
-from typedweb import StreamingResponse
+from hintapi import StreamingResponse
 
 
 async def slow_numbers(minimum, maximum):
@@ -357,11 +357,11 @@ async def return_stream(scope, receive, send):
 
 #### Jinja2 模板引擎
 
-typedweb 内置了对 Jinja2 模板的支持，只要你安装了 `jinja2` 模块，就能从 `typedweb.templates` 中导出 `Jinja2Templates`。以下是一个简单的使用样例，访问 "/" 它将从项目根目录下的 templates 目录寻找 homepage.html 文件进行渲染。
+hintapi 内置了对 Jinja2 模板的支持，只要你安装了 `jinja2` 模块，就能从 `hintapi.templates` 中导出 `Jinja2Templates`。以下是一个简单的使用样例，访问 "/" 它将从项目根目录下的 templates 目录寻找 homepage.html 文件进行渲染。
 
 ```python
-from typedweb import Index, TemplateResponse
-from typedweb.http.templates import Jinja2Templates
+from hintapi import Index, TemplateResponse
+from hintapi.http.templates import Jinja2Templates
 
 app = Index(templates=Jinja2Templates("templates"))
 
@@ -375,20 +375,20 @@ async def homepage():
 
 #### 其他模板引擎
 
-通过继承 `typedweb.templates.BaseTemplates` 并实现 `TemplateResponse` 方法，你可以实现自己的模板引擎类。
+通过继承 `hintapi.templates.BaseTemplates` 并实现 `TemplateResponse` 方法，你可以实现自己的模板引擎类。
 
 ### SendEventResponse
 
 通过 `SendEventResponse` 可以返回一个 [Server-sent Events](https://developer.mozilla.org/zh-CN/docs/Server-sent_events/Using_server-sent_events) 响应，这是一种 HTTP 长连接响应，可应用于服务器实时推送数据到客户端等场景。
 
-`SendEventResponse` 除了可以接受诸如 `status_code`、`headers` 等常规参数外，还需要自行传入一个用于生成消息的异步生成器。传入的异步生成器 `yield` 的每一条消息都需要为合规的 Server-Sent Event 消息（`typedweb.ServerSentEvent` 类型）。
+`SendEventResponse` 除了可以接受诸如 `status_code`、`headers` 等常规参数外，还需要自行传入一个用于生成消息的异步生成器。传入的异步生成器 `yield` 的每一条消息都需要为合规的 Server-Sent Event 消息（`hintapi.ServerSentEvent` 类型）。
 
 如下是一个每隔一秒发送一条 hello 消息、一共发送一百零一条消息的样例。
 
 ```python
 import asyncio
 
-from typedweb import Index, SendEventResponse
+from hintapi import Index, SendEventResponse
 
 app = Index()
 
@@ -406,12 +406,12 @@ async def message():
 
 ### 响应的简化写法
 
-为了方便使用，typedweb 允许自定义一些函数来处理 HTTP 处理器返回的非 `HttpResponse` 对象。它的原理是拦截响应，通过响应值的类型来自动选择处理函数，把非 `HttpResponse` 对象转换为 `HttpResponse` 对象。
+为了方便使用，hintapi 允许自定义一些函数来处理 HTTP 处理器返回的非 `HttpResponse` 对象。它的原理是拦截响应，通过响应值的类型来自动选择处理函数，把非 `HttpResponse` 对象转换为 `HttpResponse` 对象。
 
 !!! tip ""
-    如果需要手动把函数的返回值转换为 `HttpResponse` 对象，则可以使用 `typedweb.responses.convert_response`。
+    如果需要手动把函数的返回值转换为 `HttpResponse` 对象，则可以使用 `hintapi.responses.convert_response`。
 
-在下例中，视图函数返回一个 `dict` 对象，但客户端接收到的却是一个 JSON。这是因为 typedweb 内置了一些处理函数用于处理常见的类型：
+在下例中，视图函数返回一个 `dict` 对象，但客户端接收到的却是一个 JSON。这是因为 hintapi 内置了一些处理函数用于处理常见的类型：
 
 - `dict | tuple | list`：自动转换为 `JSONResponse`
 - `str | bytes`：自动转换为 `PlainTextResponse`
@@ -432,7 +432,7 @@ async def not_found():
 
 
 async def no_content():
-    return "", 301, {"location": "https://typedweb.aber.sh"}
+    return "", 301, {"location": "https://hintapi.aber.sh"}
 ```
 
 同样的，你也可以自定义响应值的简化写法以统一项目的响应规范（哪怕有 `TypedDict`，Python 的 `Dict` 约束依旧很弱，但 dataclass 则有效得多），如下例所示，当你在视图函数里返回 `Error` 对象时，它都会自动被转换为 `JSONResponse`，并且状态码默认为 `400`：
@@ -441,7 +441,7 @@ async def no_content():
 from dataclasses import dataclass, asdict
 from typing import Mapping
 
-from typedweb import Index, HttpResponse, JSONResponse
+from hintapi import Index, HttpResponse, JSONResponse
 
 app = Index()
 
@@ -462,7 +462,7 @@ def _error_json(error: Error, status: int = 400, headers: Mapping[str, str] = No
 
 ```python
 from typing import Mapping
-from typedweb import Index, HttpResponse
+from hintapi import Index, HttpResponse
 
 app = Index()
 
@@ -480,10 +480,10 @@ def _more_json(body, status: int = 200, headers: Mapping[str, str] = None) -> Ht
 
 其参数签名是：`HTTPException(status_code: int, headers: dict = None, content: typing.Any = None)`
 
-你可以通过抛出 `HTTPException` 来返回一个 HTTP 响应（不必担心它变成一个真正的异常抛出，typedweb 会将它变成一个普通的响应对象）。如果你没有给出一个类型为 `bytes` 或 `str` 的 `content` 值，那么它将使用 Python 标准库中的 `http.HTTPStatus(status_code).description` 作为最终结果。
+你可以通过抛出 `HTTPException` 来返回一个 HTTP 响应（不必担心它变成一个真正的异常抛出，hintapi 会将它变成一个普通的响应对象）。如果你没有给出一个类型为 `bytes` 或 `str` 的 `content` 值，那么它将使用 Python 标准库中的 `http.HTTPStatus(status_code).description` 作为最终结果。
 
 ```python
-from typedweb import HTTPException
+from hintapi import HTTPException
 
 
 async def endpoint():
@@ -495,7 +495,7 @@ async def endpoint():
 有时候也许你想返回更多的信息，可以像使用 `HttpResponse` 一样为它传递 `content`、`headers` 参数来控制最终实际的响应对象。下面是一个简单的例子。
 
 ```python
-from typedweb import HTTPException
+from hintapi import HTTPException
 
 
 async def endpoint():
@@ -509,12 +509,12 @@ async def endpoint():
 
 ### 自定义异常处理
 
-对于一些故意抛出的异常，typedweb 提供了方法进行统一处理。
+对于一些故意抛出的异常，hintapi 提供了方法进行统一处理。
 
-你可以捕捉指定的 HTTP 状态码，那么在应对包含对应 HTTP 状态码的 `HTTPException` 异常时，typedweb 会使用你定义的函数而不是默认行为。你也可以捕捉其他继承自 `Exception` 的异常，通过自定义函数，返回指定的内容给客户端。
+你可以捕捉指定的 HTTP 状态码，那么在应对包含对应 HTTP 状态码的 `HTTPException` 异常时，hintapi 会使用你定义的函数而不是默认行为。你也可以捕捉其他继承自 `Exception` 的异常，通过自定义函数，返回指定的内容给客户端。
 
 ```python
-from typedweb import Index, HTTPException, HttpResponse, PlainTextResponse
+from hintapi import Index, HTTPException, HttpResponse, PlainTextResponse
 
 app = Index()
 
@@ -532,7 +532,7 @@ async def value_error(exc: ValueError) -> HttpResponse:
 除了装饰器注册，你同样可以使用列表式的注册方式，下例与上例等价：
 
 ```python
-from typedweb import Index, HTTPException, HttpResponse, PlainTextResponse
+from hintapi import Index, HTTPException, HttpResponse, PlainTextResponse
 
 
 async def not_found(exc: HTTPException) -> HttpResponse:
@@ -553,11 +553,11 @@ app = Index(exception_handlers={
 
 ### CORS
 
-在现代浏览器中解决跨域问题一般使用 [Cross-Origin Resource Sharing](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS)，在 typedweb 使用如下代码即可快速配置 API 允许跨域。
+在现代浏览器中解决跨域问题一般使用 [Cross-Origin Resource Sharing](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS)，在 hintapi 使用如下代码即可快速配置 API 允许跨域。
 
 ```python
-from typedweb import Routes
-from typedweb.middlewares import CORSMiddleware
+from hintapi import Routes
+from hintapi.middlewares import CORSMiddleware
 
 
 routes = Routes(..., http_middlewares=[CORSMiddleware()])

@@ -1,50 +1,50 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/abersheeran/typedweb/master/docs/img/typedweb.png" />
+<h1>Hint API</h1>
 
 <p>
 中文
 |
-<a href="https://github.com/abersheeran/typedweb/tree/master/README-en.md">English</a>
+<a href="https://github.com/abersheeran/hintapi/tree/master/README-en.md">English</a>
 </p>
 
 <p>
-<a href="https://github.com/abersheeran/typedweb/actions?query=workflow%3ATest">
-<img src="https://github.com/abersheeran/typedweb/workflows/Test/badge.svg" alt="Github Action Test" />
+<a href="https://github.com/abersheeran/hintapi/actions?query=workflow%3ATest">
+<img src="https://github.com/abersheeran/hintapi/workflows/Test/badge.svg" alt="Github Action Test" />
 </a>
 
-<a href="https://app.codecov.io/gh/abersheeran/typedweb/">
-<img alt="Codecov" src="https://img.shields.io/codecov/c/github/abersheeran/typedweb">
-</a>
-</p>
-
-<p>
-<a href="https://github.com/abersheeran/typedweb/actions?query=workflow%3A%22Publish+PyPi%22">
-<img src="https://github.com/abersheeran/typedweb/workflows/Publish%20PyPi/badge.svg" alt="Publish PyPi" />
-</a>
-
-<a href="https://pypi.org/project/typedweb/">
-<img src="https://img.shields.io/pypi/v/typedweb" alt="PyPI" />
-</a>
-
-<a href="https://pepy.tech/project/typedweb">
-<img src="https://static.pepy.tech/personalized-badge/typedweb?period=total&units=international_system&left_color=black&right_color=blue&left_text=PyPi%20Downloads" alt="Downloads">
+<a href="https://app.codecov.io/gh/abersheeran/hintapi/">
+<img alt="Codecov" src="https://img.shields.io/codecov/c/github/abersheeran/hintapi">
 </a>
 </p>
 
 <p>
-<img src="https://img.shields.io/pypi/pyversions/typedweb" alt="PyPI - Python Version" />
+<a href="https://github.com/abersheeran/hintapi/actions?query=workflow%3A%22Publish+PyPi%22">
+<img src="https://github.com/abersheeran/hintapi/workflows/Publish%20PyPi/badge.svg" alt="Publish PyPi" />
+</a>
+
+<a href="https://pypi.org/project/hintapi/">
+<img src="https://img.shields.io/pypi/v/hintapi" alt="PyPI" />
+</a>
+
+<a href="https://pepy.tech/project/hintapi">
+<img src="https://static.pepy.tech/personalized-badge/hintapi?period=total&units=international_system&left_color=black&right_color=blue&left_text=PyPi%20Downloads" alt="Downloads">
+</a>
+</p>
+
+<p>
+<img src="https://img.shields.io/pypi/pyversions/hintapi" alt="PyPI - Python Version" />
 </p>
 
 一个易用的高性能异步 web 框架。
 
-<a href="https://typedweb.aber.sh/stable/">typedweb 文档</a>
+<a href="https://hintapi.aber.sh/stable/">hintapi 文档</a>
 
 </div>
 
 ---
 
-typedweb 实现了 [ASGI3](http://asgi.readthedocs.io/en/latest/) 接口，并使用 Radix Tree 进行路由查找。是[最快的 Python web 框架之一](https://github.com/the-benchmarker/web-frameworks)。一切特性都服务于快速开发高性能的 Web 服务。
+hintapi 实现了 [WSGI](http://wsgi.readthedocs.io/en/latest/) 接口，并使用 Radix Tree 进行路由查找。是[最快的 Python web 框架之一](https://github.com/the-benchmarker/web-frameworks)。一切特性都服务于快速开发高性能的 Web 服务。
 
 - 大量正确的类型注释
 - 灵活且高效的路由系统
@@ -56,17 +56,17 @@ typedweb 实现了 [ASGI3](http://asgi.readthedocs.io/en/latest/) 接口，并�
 ## Install
 
 ```bash
-pip install -U typedweb
+pip install -U hintapi
 ```
 
 或者直接从 Github 上安装最新版本（不稳定）
 
 ```bash
-pip install -U git+https://github.com/abersheeran/typedweb@setup.py
+pip install -U git+https://github.com/abersheeran/hintapi@setup.py
 ```
 
 中国大陆内的用户可从 Gitee 上的镜像仓库拉取
 
 ```bash
-pip install -U git+https://gitee.com/abersheeran/typedweb.git@setup.py
+pip install -U git+https://gitee.com/abersheeran/hintapi.git@setup.py
 ```

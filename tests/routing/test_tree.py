@@ -3,7 +3,7 @@ from uuid import UUID
 
 import pytest
 
-from typedweb.routing.tree import RadixTree
+from hintapi.routing.tree import RadixTree
 
 
 @pytest.fixture

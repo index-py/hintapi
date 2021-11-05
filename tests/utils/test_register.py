@@ -1,6 +1,6 @@
 from typing import Callable
 
-from typedweb.utils.register import RegisterDict
+from hintapi.utils.register import RegisterDict
 
 
 def test_register_dict():

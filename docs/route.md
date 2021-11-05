@@ -1,13 +1,13 @@
-typedweb 的路由基于 [Radix Tree](https://en.wikipedia.org/wiki/Radix_tree)。
+hintapi 的路由基于 [Radix Tree](https://en.wikipedia.org/wiki/Radix_tree)。
 
 ## 基本用法
 
 ### 使用装饰器
 
-与 bottle/flask 之类的框架一样，typedweb 支持使用装饰器注册路由。下面的例子里，`name` 是路由名称，这在反向查找路由时会起到作用。
+与 bottle/flask 之类的框架一样，hintapi 支持使用装饰器注册路由。下面的例子里，`name` 是路由名称，这在反向查找路由时会起到作用。
 
 ```python
-from typedweb import Index
+from hintapi import Index
 
 app = Index()
 
@@ -33,8 +33,8 @@ async def hello_ws():
 事实上，装饰器路由申明方式是如下方法的快捷方式
 
 ```python
-from typedweb import Index
-from typedweb.routing import HttpRoute, SocketRoute
+from hintapi import Index
+from hintapi.routing import HttpRoute, SocketRoute
 
 app = Index()
 
@@ -54,7 +54,7 @@ async def hello_ws():
 )
 ```
 
-typedweb 的路由对象有两种，分别对应 Http 和 WebSocket 方法。
+hintapi 的路由对象有两种，分别对应 Http 和 WebSocket 方法。
 
 ```python
 # Http
@@ -72,11 +72,11 @@ SocketRoute(path: str, endpoint: Any, name: Optional[str] = "")
 
 #### 预处理
 
-使用路由对象注册的可调用对象 endpoint，typedweb 会自动为其注册一个装饰器，用于处理部分参数的自动校验和注入。
+使用路由对象注册的可调用对象 endpoint，hintapi 会自动为其注册一个装饰器，用于处理部分参数的自动校验和注入。
 
 #### 中间件
 
-你可以对路由对象使用装饰器，这将会作用到 endpoint 上，但与直接对 endpoint 使用装饰器不同的是它作用于 typedweb 预处理后的 endpoint 上。
+你可以对路由对象使用装饰器，这将会作用到 endpoint 上，但与直接对 endpoint 使用装饰器不同的是它作用于 hintapi 预处理后的 endpoint 上。
 
 !!! tip ""
     你可以在注册的中间件里捕捉到可能抛出的参数校验异常。
@@ -112,7 +112,7 @@ async def path(): ...
 在使用装饰器注册时可以直接限定该路由能够接受的请求方法，目前仅支持以下五种 HTTP 方法的限定。如果你没有指定，则默认允许所有请求方法。
 
 ```python
-from typedweb import Index
+from hintapi import Index
 
 app = Index()
 
@@ -145,7 +145,7 @@ async def need_delete():
 如上代码是在内部使用了 `required_method` 装饰器来达到限定请求方法的目的，你也可以选择手动注册装饰器，这将能限定更多种类的请求。代码样例如下：
 
 ```python
-from typedweb import Index, required_method
+from hintapi import Index, required_method
 
 app = Index()
 
@@ -165,11 +165,11 @@ async def need_connect():
 
 ### 列表式注册
 
-typedweb 同样支持类似于 Django 的列表式写法：
+hintapi 同样支持类似于 Django 的列表式写法：
 
 ```python
-from typedweb import Index
-from typedweb.routing import HttpRoute, SocketRoute
+from hintapi import Index
+from hintapi.routing import HttpRoute, SocketRoute
 
 
 async def hello():
@@ -200,7 +200,7 @@ app = Index(routes=[
     `any` 是极为特殊的参数类型，它只能出现在路径的最后，并且能匹配到所有的字符。
 
 ```python
-from typedweb import Index, request
+from hintapi import Index, request
 
 app = Index()
 
@@ -215,7 +215,7 @@ async def what_is_your_name():
 某些情况下，需要由路由名称反向生成对应的 URL 值，可以使用 `app.router.url_for`。
 
 ```python
-from typedweb import Index, request
+from hintapi import Index, request
 
 app = Index()
 
@@ -242,7 +242,7 @@ assert app.router.url_for("hello-with-name", {"name": "Aber"}) == "/hello/Aber"
 `Routes` 也同样允许你使用类似于 Django 一样的路由申明方式，示例如下。
 
 ```python
-from typedweb.routing import Routes, HttpRoute
+from hintapi.routing import Routes, HttpRoute
 
 
 async def hello(request):
@@ -266,7 +266,7 @@ app.router << app1_routes << app2_routes
 当然，你也可以直接在初始化 `Index` 对象时传入。
 
 ```python
-from typedweb import Index
+from hintapi import Index
 
 from .app1.urls import routes as app1_routes
 
@@ -388,11 +388,11 @@ routes = Routes(
 ### FileRoutes
 
 ```
-from typedweb.routing.extensions import FileRoutes
+from hintapi.routing.extensions import FileRoutes
 ```
 
 !!! notice ""
-    这也是 typedweb 此项目的命名来源之一。
+    这也是 hintapi 此项目的命名来源之一。
 
 `FileRoutes` 是一个特殊的路由序列，它允许你将某一个 `module` 下所有的 `.py` 文件一一对应到其相对路径相同的路由。
 
@@ -414,7 +414,7 @@ from typedweb.routing.extensions import FileRoutes
 
 `module/filename.py` 文件将对应路由 `/filename`，`module/dirname/filename.py` 将对应 `/dirname/filename`，以此类推。
 
-文件映射有一个特殊规则：`module/**/typedweb` 将负责处理 `/**/` 路径的内容。
+文件映射有一个特殊规则：`module/**/hintapi` 将负责处理 `/**/` 路径的内容。
 
 !!! tip ""
     你可以将文件名或文件夹名修改为 `module/{name}.py` 以此接受路径参数。
@@ -424,14 +424,14 @@ from typedweb.routing.extensions import FileRoutes
 ### MultimethodRoutes
 
 ```
-from typedweb.routing.extensions import MultimethodRoutes
+from hintapi.routing.extensions import MultimethodRoutes
 ```
 
 `MultimethodRoutes` 是一个特殊的路由序列，它允许你使用如下方式注册路由，在不显式使用类的情况下拆分同一个 PATH 下的不同方法到多个函数中。除此之外，均与 `Routes` 相同。
 
 ```python
-from typedweb import Index
-from typedweb.routing.extensions import MultimethodRoutes
+from hintapi import Index
+from hintapi.routing.extensions import MultimethodRoutes
 
 routes = MultimethodRoutes()
 

@@ -6,7 +6,7 @@ import os
 import traceback
 import typing
 
-from baize.typing import WSGIApp, Environ, StartResponse, ExcInfo
+from baize.typing import Environ, ExcInfo, StartResponse, WSGIApp
 
 if typing.TYPE_CHECKING:
     from .requests import HttpRequest
@@ -112,7 +112,7 @@ TEMPLATE = """
         <style type='text/css'>
             {styles}
         </style>
-        <title>typedweb Debugger</title>
+        <title>hintapi Debugger</title>
     </head>
     <body>
         <h1>500 Server Error</h1>
@@ -206,15 +206,15 @@ class DebugMiddleware:
 
         def _start_response(
             status: str,
-            headers: typing.List[typing.Tuple[str, str]],
+            response_headers: typing.List[typing.Tuple[str, str]],
             exc_info: ExcInfo = None,
         ) -> None:
             nonlocal exc
             exc = exc_info[1] if exc_info else None
-            start_response(status, headers, exc_info)
+            start_response(status, response_headers, exc_info)
 
         try:
-            yield from self.app(environ, _start_response)
+            yield from self.app(environ, typing.cast(StartResponse, _start_response))
         except BaseException as e:
             exc = e
 

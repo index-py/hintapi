@@ -1,7 +1,7 @@
 def test_decorator():
-    from typedweb import TypedWeb
+    from hintapi import hintapi
 
-    app = TypedWeb()
+    app = hintapi()
 
     @app.router.http("/hello", name="hello")
     def hello():
@@ -20,9 +20,9 @@ def test_decorator():
 
 
 def test_decorator_required_method():
-    from typedweb import TypedWeb
+    from hintapi import hintapi
 
-    app = TypedWeb()
+    app = hintapi()
 
     @app.router.http.get("/get")
     def need_get():
@@ -52,10 +52,10 @@ def test_decorator_required_method():
 
 
 def test_lshift():
-    from typedweb import TypedWeb
-    from typedweb.routing import HttpRoute, SocketRoute
+    from hintapi import hintapi
+    from hintapi.routing import HttpRoute, SocketRoute
 
-    app = TypedWeb()
+    app = hintapi()
 
     def hello():
         return "hello world"
@@ -78,9 +78,9 @@ def test_lshift():
 
 
 def test_url_for():
-    from typedweb import TypedWeb
+    from hintapi import hintapi
 
-    app = TypedWeb()
+    app = hintapi()
 
     @app.router.http("/hello", name="hello")
     @app.router.http("/hello/{name}", name="hello-with-name")
@@ -92,7 +92,7 @@ def test_url_for():
 
 
 def test_prefix():
-    from typedweb.routing import HttpRoute, Routes
+    from hintapi.routing import HttpRoute, Routes
 
     assert [
         route.path
@@ -115,7 +115,7 @@ def test_prefix():
 
 
 def test_routes_operator():
-    from typedweb import HttpRoute, Routes
+    from hintapi import HttpRoute, Routes
 
     routes = Routes()
     routes << Routes(
@@ -146,9 +146,9 @@ def test_routes_operator():
 
 
 def test_empty_path():
-    from typedweb import TypedWeb
+    from hintapi import hintapi
 
-    app = TypedWeb()
+    app = hintapi()
 
     @app.router.http("")
     def homepage():

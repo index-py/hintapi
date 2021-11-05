@@ -47,7 +47,7 @@ body:
     attributes:
       label: Environment
       description: Describe your environment.
-      placeholder: OS / Python / typedweb version
+      placeholder: OS / Python / hintapi version
     validations:
       required: true
   - type: textarea

@@ -1,8 +1,7 @@
-import pytest
 from httpx import Client
 
-from typedweb import HttpRoute
-from typedweb.routing.extensions import MultimethodRoutes as Routes
+from hintapi import HttpRoute
+from hintapi.routing.extensions import MultimethodRoutes as Routes
 
 
 def test_routes():
@@ -35,7 +34,7 @@ def test_routes():
 
 
 def test_mulitmethodroutes():
-    from typedweb import TypedWeb
+    from hintapi import hintapi
 
     routes = Routes()
 
@@ -51,7 +50,7 @@ def test_mulitmethodroutes():
     def delete_user():
         pass
 
-    app = TypedWeb(routes=routes)
+    app = hintapi(routes=routes)
 
     endpoint = app.router.search("http", "/user")[1]
     assert issubclass(endpoint, routes.base_class)
@@ -64,7 +63,7 @@ def test_mulitmethodroutes():
 
 
 def test_mulitmethodroutes_with_prefix():
-    from typedweb import TypedWeb
+    from hintapi import hintapi
 
     routes = Routes()
 
@@ -80,7 +79,7 @@ def test_mulitmethodroutes_with_prefix():
     def delete_user():
         pass
 
-    app = TypedWeb(routes="/api" // routes)
+    app = hintapi(routes="/api" // routes)
 
     endpoint = app.router.search("http", "/api/user")[1]
     assert issubclass(endpoint, routes.base_class)
@@ -92,9 +91,8 @@ def test_mulitmethodroutes_with_prefix():
     )
 
 
-
 def test_mulitmethodroutes_with_parameters():
-    from typedweb import TypedWeb, Path
+    from hintapi import Path, hintapi
 
     routes = Routes()
 
@@ -106,7 +104,7 @@ def test_mulitmethodroutes_with_parameters():
     def name(name: str = Path(...)):
         return name
 
-    app = TypedWeb(routes=routes)
+    app = hintapi(routes=routes)
 
     with Client(app=app, base_url="http://localhost") as client:
         resp = client.get("/aber")

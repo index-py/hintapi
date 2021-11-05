@@ -1,9 +1,9 @@
-site_name: typedweb
-site_description: 一个基于 ASGI 协议的异步 Web 框架.
+site_name: hintapi
+site_description: 基于 Type hint 的 Web 框架
 
-repo_name: typedweb
-repo_url: https://github.com/abersheeran/typedweb
-edit_uri: "https://github.com/abersheeran/typedweb/tree/master/docs/"
+repo_name: hintapi
+repo_url: https://github.com/abersheeran/hintapi
+edit_uri: "https://github.com/abersheeran/hintapi/tree/master/docs/"
 
 use_directory_urls: true
 
@@ -33,10 +33,7 @@ nav:
   - 介绍: index.md
   - 路由: route.md
   - Http: "http.md"
-  - WebSocket: "websocket.md"
-  - Lifespan: "event.md"
   - 注入参数: "parameters.md"
-  - 命令: "command.md"
 
 markdown_extensions:
   - admonition
@@ -59,10 +56,5 @@ plugins:
           路由: Routing
           命令: Commands
           注入参数: Parameters
-
-extra:
-  analytics:
-    provider: google
-    property: G-48LLZS5518
 
 copyright: Copyright &copy; <a href="https://abersheeran.com">AberSh</a>

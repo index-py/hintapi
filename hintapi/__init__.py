@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .applications import TypedWeb
+from .applications import HintAPI
 from .exceptions import HTTPException
 from .parameters.field_functions import (
     Body,
@@ -28,7 +28,7 @@ from .routing import HttpRoute, Routes
 from .views import HttpView, required_method
 
 __all__ = [
-    "TypedWeb",
+    "HintAPI",
     "request",
     "HTTPException",
     "Body",

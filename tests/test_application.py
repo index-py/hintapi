@@ -5,9 +5,9 @@ from httpx import Client
 
 
 def test_application():
-    from typedweb import TypedWeb
+    from hintapi import hintapi
 
-    app = TypedWeb()
+    app = hintapi()
     with pytest.raises(RuntimeError):
         app.debug = True
 
@@ -23,7 +23,7 @@ def test_example_application():
     with Client(app=app, base_url="http://localhost") as client:
         response = client.get("/")
         assert response.status_code == 200
-        assert response.text == "hello, typedweb"
+        assert response.text == "hello, hintapi"
 
         response = client.get("/message")
         assert response.status_code == 200
@@ -50,7 +50,7 @@ def test_custom_application_response_converter():
     from dataclasses import asdict, dataclass
     from typing import Mapping
 
-    from typedweb import HttpResponse, TypedWeb, JSONResponse, PlainTextResponse
+    from hintapi import HttpResponse, JSONResponse, PlainTextResponse, hintapi
 
     @dataclass
     class Error:
@@ -58,7 +58,7 @@ def test_custom_application_response_converter():
         title: str = ""
         message: str = ""
 
-    app = TypedWeb(
+    app = hintapi(
         response_converters={
             Error: lambda error, status=400, headers=None: JSONResponse(
                 asdict(error), status, headers

@@ -4,12 +4,12 @@ import pytest
 from httpx import Client
 from typing_extensions import Annotated
 
-from typedweb import Body, Cookie, Depends, Header, Path, Query, Request
-from typedweb.applications import TypedWeb
+from hintapi import Body, Cookie, Depends, Header, Path, Query, Request
+from hintapi.applications import HintAPI
 
 
 def test_path():
-    app = TypedWeb()
+    app = HintAPI()
 
     @app.router.http.get("/")
     @app.router.http.get("/{name}", name=None)
@@ -31,7 +31,7 @@ def test_path():
 
 
 def test_query():
-    app = TypedWeb()
+    app = HintAPI()
 
     @app.router.http.get("/")
     def query(name: Annotated[str, Query(...)]):
@@ -48,7 +48,7 @@ def test_query():
 
 
 def test_header():
-    app = TypedWeb()
+    app = HintAPI()
 
     @app.router.http.get("/")
     def header(name: Annotated[str, Header()]):
@@ -65,7 +65,7 @@ def test_header():
 
 
 def test_cookie():
-    app = TypedWeb()
+    app = HintAPI()
 
     @app.router.http.get("/")
     def cookie(name: Annotated[str, Cookie()]):
@@ -82,7 +82,7 @@ def test_cookie():
 
 
 def test_body():
-    app = TypedWeb()
+    app = HintAPI()
 
     @app.router.http.post("/")
     def body(name: Annotated[str, Body()]):
@@ -99,23 +99,23 @@ def test_body():
 
 
 def test_request():
-    app0 = TypedWeb()
+    app0 = HintAPI()
 
     @app0.router.http.get("/")
-    def homepage(app: Annotated[TypedWeb, Request()]):
+    def homepage(app: Annotated[HintAPI, Request()]):
         return str(app is app0)
 
     @app0.router.http.get("/no-attr")
-    def no_attr(application: Annotated[TypedWeb, Request()]):
+    def no_attr(application: Annotated[HintAPI, Request()]):
         return str(application is app0)
 
     @app0.router.http.get("/no-attr-with-default")
-    def no_attr_with_default(application: Annotated[TypedWeb, Request(app0)]):
+    def no_attr_with_default(application: Annotated[HintAPI, Request(app0)]):
         return str(application is app0)
 
     @app0.router.http.get("/no-attr-with-default-factory")
     def no_attr_with_default_factory(
-        application: Annotated[TypedWeb, Request(default_factory=lambda: app0)],
+        application: Annotated[HintAPI, Request(default_factory=lambda: app0)],
     ):
         return str(application is app0)
 
@@ -136,7 +136,7 @@ def test_request():
 
 
 def test_depend():
-    app = TypedWeb()
+    app = HintAPI()
 
     def get_name(name: Annotated[str, Body(...)]):
         return name
@@ -175,7 +175,7 @@ def test_depend():
 
 
 def test_middleware():
-    app = TypedWeb()
+    app = HintAPI()
 
     def middleware(endpoint):
         def middleware_wrapper(query: str = Query(...)):
