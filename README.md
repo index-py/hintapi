@@ -50,3 +50,17 @@ hintapi 实现了 [WSGI](http://wsgi.readthedocs.io/en/latest/) 接口，并使�
 ```bash
 pip install -U hintapi
 ```
+
+## Example
+
+```python
+from typing_extensions import Annotated
+from hintapi import HintAPI, PlainTextResponse
+
+app = HintAPI()
+
+
+@app.router.http("/")
+def homepage() -> Annotated[str, PlainTextResponse[200]]:
+    return "hi, this is homepage"
+```
