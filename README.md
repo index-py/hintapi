@@ -49,24 +49,9 @@ hintapi 实现了 [WSGI](http://wsgi.readthedocs.io/en/latest/) 接口，并使�
 - 大量正确的类型注释
 - 灵活且高效的路由系统
 - 可视化 API 接口与在线调试
-- 支持 [Server-sent events](https://developer.mozilla.org/zh-CN/docs/Web/API/Server-sent_events/Using_server-sent_events) 与 WebSocket
-- 自带一键部署命令 (基于 uvicorn 与 gunicorn)
-- 可使用任何可用的 ASGI 生态
 
 ## Install
 
 ```bash
 pip install -U hintapi
-```
-
-或者直接从 Github 上安装最新版本（不稳定）
-
-```bash
-pip install -U git+https://github.com/abersheeran/hintapi@setup.py
-```
-
-中国大陆内的用户可从 Gitee 上的镜像仓库拉取
-
-```bash
-pip install -U git+https://gitee.com/abersheeran/hintapi.git@setup.py
 ```
