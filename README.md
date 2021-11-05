@@ -36,7 +36,7 @@
 <img src="https://img.shields.io/pypi/pyversions/hintapi" alt="PyPI - Python Version" />
 </p>
 
-一个易用的高性能异步 web 框架。
+基于 Type hint 的 Web 框架
 
 <a href="https://hintapi.aber.sh/stable/">hintapi 文档</a>
 

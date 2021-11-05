@@ -2,16 +2,16 @@ hintapi 使用 [pydantic](https://pydantic-docs.helpmanual.io/) 用于更轻松�
 
 ## 显示 OpenAPI 文档
 
-将 `hintapi.openapi.application.OpenAPI` 挂载进 hintapi 中。启动 index，访问你服务上 `/docs/` 即可看到生成的文档。
+将 `hintapi.openapi.application.OpenAPI` 挂载进 hintapi 中。启动 HintAPI，访问你服务上 `/docs/` 即可看到生成的文档。
 
 !!! tip ""
     如果你不需要生成文档，仅仅只需要自动校验参数功能，这一步可以跳过。
 
 ```python
-from hintapi import Index
+from hintapi import HintAPI
 from hintapi.openapi import OpenAPI
 
-app = Index()
+app = HintAPI()
 
 app.router << ("/docs" // OpenAPI().routes)
 ```
@@ -51,7 +51,7 @@ routes = Routes()
 
 
 @routes.http('/', tags=["tag0", "tag1"])
-async def handler():
+def handler():
     return "/"
 ```
 
@@ -65,7 +65,7 @@ async def handler():
 from hintapi import HTTPView
 
 
-async def handler():
+def handler():
     """
     api summary
 
@@ -76,7 +76,7 @@ async def handler():
 
 
 class ClassHandler(HTTPView):
-    async def get(self):
+    def get(self):
         """
         api summary
 
@@ -95,7 +95,7 @@ routes = Routes()
 
 
 @routes.http('/', summary="api summary", description="api description.............")
-async def handler():
+def handler():
     return "/"
 ```
 
@@ -108,7 +108,7 @@ routes = Routes()
 
 
 @routes.http('/', summary="api summary")
-async def handler():
+def handler():
     """
     api description..........................
     .........................................
@@ -130,7 +130,7 @@ from typing_extensions import Annotated
 from hintapi import Query
 
 
-async def getlist(
+def getlist(
     page_num: Annotated[int, Query(...)],
     page_size: Annotated[int, Query(...)],
 ):
@@ -150,7 +150,7 @@ class PageQuery(BaseModel):
     page_size: int
 
 
-async def getlist(query: Annotated[PageQuery, Query(exclusive=True)]):
+def getlist(query: Annotated[PageQuery, Query(exclusive=True)]):
     ...
 ```
 
@@ -160,7 +160,7 @@ async def getlist(query: Annotated[PageQuery, Query(exclusive=True)]):
 - `Query`：`request.query_params`
 - `Header`：`request.headers`
 - `Cookie`：`request.cookies`
-- `Body`：`await request.data()`
+- `Body`：`request.data()`
 
 通过这样标注的请求参数，不仅会自动校验、转换类型，还能自动生成接口文档。在你需要接口文档的情况下，十分推荐这么使用。
 
@@ -181,14 +181,14 @@ def get_name(name: Annotated[str, Query(...)]):
     return name.lower()
 
 
-async def hello(name: Annotated[str, Depends(get_name)]):
+def hello(name: Annotated[str, Depends(get_name)]):
     return f"hello {name}"
 ```
 
 比较特殊的是，如果你使用 `Depends(......)` 标注的可调用对象是一个生成器函数，那么它将会被 [`contextlib`](https://docs.python.org/3/library/contextlib.html) 改造，`yield` 值被注入视图中，清理部分在视图函数退出后执行（无论视图函数是正常返回或是抛出异常，均会执行清理过程）。在获取某些需要清理的资源时，这特别有效。
 
 ```python
-async def get_db_connection():
+def get_db_connection():
     connection = ...  # get connection
     try:
         yield connection
@@ -196,7 +196,7 @@ async def get_db_connection():
         connection.close()
 
 
-async def get_user(db: Annotated[Connection, Depends(get_db_connection)]):
+def get_user(db: Annotated[Connection, Depends(get_db_connection)]):
     ...
 ```
 
@@ -211,15 +211,15 @@ from http import HTTPStatus
 import msgpack
 from typing_extensions import Annotated
 
-from hintapi import Index
+from hintapi import HintAPI
 from hintapi.applications import FactoryClass
 from hintapi.requests import HttpRequest
 
 
 class MsgPackRequest(HttpRequest):
-    async def data(self) -> Annotated[typing.Any, ContentType("application/x-msgpack")]:
+    def data(self) -> Annotated[typing.Any, ContentType("application/x-msgpack")]:
         if self.content_type == "application/x-msgpack":
-            return msgpack.unpackb(await self.body)
+            return msgpack.unpackb(self.body)
 
         raise HTTPException(
             HTTPStatus.UNSUPPORTED_MEDIA_TYPE,
@@ -227,7 +227,7 @@ class MsgPackRequest(HttpRequest):
         )
 
 
-app = Index(factory_class=FactoryClass(http=MsgPackRequest))
+app = HintAPI(factory_class=FactoryClass(http=MsgPackRequest))
 ```
 
 ### 读取 `request` 属性
@@ -242,7 +242,7 @@ from hintapi import Request
 from yourmodule import User
 
 
-async def code(user: Annotated[User, Request()]):
+def code(user: Annotated[User, Request()]):
     ...
 ```
 
@@ -253,7 +253,7 @@ from typing_extensions import Annotated
 from hintapi import Request
 
 
-async def code(username: Annotated[str, Request(alias="user.name")]):
+def code(username: Annotated[str, Request(alias="user.name")]):
     ...
 ```
 
@@ -266,9 +266,9 @@ from typing_extensions import Annotated
 
 
 def required_auth(endpoint):
-    async def wrapper(authorization: Annotated[str, Header()]):
+    def wrapper(authorization: Annotated[str, Header()]):
         ...
-        return await endpoint()
+        return endpoint()
 
     return wrapper
 ```
@@ -279,13 +279,13 @@ def required_auth(endpoint):
 
 ```python
 from typing_extensions import Annotated
-from hintapi import Index, JSONResponse
+from hintapi import HintAPI, JSONResponse
 
-app = Index()
+app = HintAPI()
 
 
 @app.router.http.get("/hello")
-async def hello() -> Annotated[Any, JSONResponse[200, {}, List[str]]]:
+def hello() -> Annotated[Any, JSONResponse[200, {}, List[str]]]:
     """
     hello
     """
@@ -296,9 +296,9 @@ async def hello() -> Annotated[Any, JSONResponse[200, {}, List[str]]]:
 
 ```python
 from typing_extensions import Annotated
-from hintapi import Index, JSONResponse
+from hintapi import HintAPI, JSONResponse
 
-app = Index()
+app = HintAPI()
 
 
 class ErrorMessage(BaseModel):
@@ -307,7 +307,7 @@ class ErrorMessage(BaseModel):
 
 
 @app.router.http.get("/hello")
-async def hello() -> Annotated[
+def hello() -> Annotated[
     Any,
     JSONResponse[200, {}, List[str]],
     JSONResponse[400, {}, ErrorMessage]
@@ -345,9 +345,9 @@ from typing_extensions import Annotated
 
 
 def required_auth(endpoint):
-    async def wrapper(authorization: Annotated[str, Header()]) -> Annotated[Any, HttpResponse[401]]:
+    def wrapper(authorization: Annotated[str, Header()]) -> Annotated[Any, HttpResponse[401]]:
         ...
-        return await endpoint()
+        return endpoint()
 
     return wrapper
 ```
@@ -368,9 +368,9 @@ from typing_extensions import Annotated
 def required_auth(endpoint):
     describe_extra_docs(endpoint, {"security": [{"BearerAuth": []}]})
 
-    async def wrapper(authorization: Annotated[str, Header()]) -> Annotated[Any, HttpResponse[401]]:
+    def wrapper(authorization: Annotated[str, Header()]) -> Annotated[Any, HttpResponse[401]]:
         ...
-        return await endpoint()
+        return endpoint()
 
     return wrapper
 ```

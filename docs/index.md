@@ -6,7 +6,7 @@
 
 ## 设计灵感
 
-在 [Index.py](https://index-py.aber.sh) 的使用过程里，发现 asyncio 生态并不完善，但又无法舍弃 Type hint 自动校验参数、生成文档的功能。所以裁剪了一些功能，并基于 [BáiZé](https://baize.aber.sh) 健壮的 WSGI 支持创建了此项目。
+在 [HintAPI.py](https://HintAPI-py.aber.sh) 的使用过程里，发现 asyncio 生态并不完善，但又无法舍弃 Type hint 自动校验参数、生成文档的功能。所以裁剪了一些功能，并基于 [BáiZé](https://baize.aber.sh) 健壮的 WSGI 支持创建了此项目。
 
 ## 安装方法
 

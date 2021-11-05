@@ -7,18 +7,13 @@ hintapi 的路由基于 [Radix Tree](https://en.wikipedia.org/wiki/Radix_tree)�
 与 bottle/flask 之类的框架一样，hintapi 支持使用装饰器注册路由。下面的例子里，`name` 是路由名称，这在反向查找路由时会起到作用。
 
 ```python
-from hintapi import Index
+from hintapi import HintAPI
 
-app = Index()
+app = HintAPI()
 
 
 @app.router.http("/hello", name="hello")
-async def hello():
-    ...
-
-
-@app.router.websocket("/hello", name="hello_ws")
-async def hello_ws():
+def hello():
     ...
 ```
 
@@ -33,35 +28,24 @@ async def hello_ws():
 事实上，装饰器路由申明方式是如下方法的快捷方式
 
 ```python
-from hintapi import Index
-from hintapi.routing import HttpRoute, SocketRoute
+from hintapi import HintAPI
+from hintapi.routing import HttpRoute
 
-app = Index()
+app = HintAPI()
 
 
-async def hello():
+def hello():
     return "hello world"
 
 
-async def hello_ws():
-    ...
-
-
-(
-    app.router
-    << HttpRoute("/hello", hello, name="hello")
-    << SocketRoute("/hello", hello_ws, name="hello_ws")
-)
+app.router << HttpRoute("/hello", hello, name="hello")
 ```
 
-hintapi 的路由对象有两种，分别对应 Http 和 WebSocket 方法。
+hintapi 的路由对象如下。
 
 ```python
 # Http
 HttpRoute(path: str, endpoint: Any, name: Optional[str] = "")
-
-# WebSocket
-SocketRoute(path: str, endpoint: Any, name: Optional[str] = "")
 ```
 
 - `path` 指定路由能匹配到的字符串
@@ -98,7 +82,7 @@ HttpRoute(...) @ decorator1 @ decorator2 @ decorator3
 
 ```python
 @app.router.http("/path", middlewares=[decorator1, decorator2, decorator3])
-async def path(): ...
+def path(): ...
 ```
 
 ### 限定请求方法
@@ -112,53 +96,53 @@ async def path(): ...
 在使用装饰器注册时可以直接限定该路由能够接受的请求方法，目前仅支持以下五种 HTTP 方法的限定。如果你没有指定，则默认允许所有请求方法。
 
 ```python
-from hintapi import Index
+from hintapi import HintAPI
 
-app = Index()
+app = HintAPI()
 
 
 @app.router.http.get("/get")
-async def need_get():
+def need_get():
     ...
 
 
 @app.router.http.post("/post")
-async def need_post():
+def need_post():
     ...
 
 
 @app.router.http.put("/put")
-async def need_put():
+def need_put():
     ...
 
 
 @app.router.http.patch("/patch")
-async def need_patch():
+def need_patch():
     ...
 
 
 @app.router.http.delete("/delete")
-async def need_delete():
+def need_delete():
     ...
 ```
 
 如上代码是在内部使用了 `required_method` 装饰器来达到限定请求方法的目的，你也可以选择手动注册装饰器，这将能限定更多种类的请求。代码样例如下：
 
 ```python
-from hintapi import Index, required_method
+from hintapi import HintAPI, required_method
 
-app = Index()
+app = HintAPI()
 
 
 @app.router.http("/get")
 @required_method("GET")
-async def need_get():
+def need_get():
     ...
 
 
 @app.router.http("/connect")
 @required_method("CONNECT")
-async def need_connect():
+def need_connect():
     ...
 ```
 
@@ -168,21 +152,16 @@ async def need_connect():
 hintapi 同样支持类似于 Django 的列表式写法：
 
 ```python
-from hintapi import Index
-from hintapi.routing import HttpRoute, SocketRoute
+from hintapi import HintAPI
+from hintapi.routing import HttpRoute
 
 
-async def hello():
+def hello():
     return "hello world"
 
 
-async def hello_ws():
-    ...
-
-
-app = Index(routes=[
+app = HintAPI(routes=[
     HttpRoute("/hello", hello, name="hello"),
-    SocketRoute("/hello", hello_ws, name="hello_ws"),
 ])
 ```
 
@@ -200,13 +179,13 @@ app = Index(routes=[
     `any` 是极为特殊的参数类型，它只能出现在路径的最后，并且能匹配到所有的字符。
 
 ```python
-from hintapi import Index, request
+from hintapi import HintAPI, request
 
-app = Index()
+app = HintAPI()
 
 
 @app.router.http("/{username:str}")
-async def what_is_your_name():
+def what_is_your_name():
     return request.path_params["username"]
 ```
 
@@ -215,14 +194,14 @@ async def what_is_your_name():
 某些情况下，需要由路由名称反向生成对应的 URL 值，可以使用 `app.router.url_for`。
 
 ```python
-from hintapi import Index, request
+from hintapi import HintAPI, request
 
-app = Index()
+app = HintAPI()
 
 
 @app.router.http("/hello", name="hello")
 @app.router.http("/hello/{name}", name="hello-with-name")
-async def hello():
+def hello():
     return f"hello {request.path_params.get('name')}"
 
 
@@ -230,14 +209,11 @@ assert app.router.url_for("hello") == "/hello"
 assert app.router.url_for("hello-with-name", {"name": "Aber"}) == "/hello/Aber"
 ```
 
-!!! tip ""
-    反向查找中，`websocket` 与 `http` 是互相独立的。通过 `protocol` 参数可以选择查找的路由，默认为 `http`。
-
 ## 路由分组
 
 当需要把某一些路由归为一组时，可使用 `Routes` 对象。
 
-`Routes` 对象拥有 `.http` 和 `.websocket` 方法允许你使用装饰器方式注册路由，使用方法与 `app.router` 相同。
+`Routes` 对象拥有 `.http` 方法允许你使用装饰器方式注册路由，使用方法与 `app.router` 相同。
 
 `Routes` 也同样允许你使用类似于 Django 一样的路由申明方式，示例如下。
 
@@ -245,7 +221,7 @@ assert app.router.url_for("hello-with-name", {"name": "Aber"}) == "/hello/Aber"
 from hintapi.routing import Routes, HttpRoute
 
 
-async def hello(request):
+def hello(request):
     return "hello world"
 
 
@@ -263,14 +239,14 @@ from .app2.urls import routes as app2_routes
 app.router << app1_routes << app2_routes
 ```
 
-当然，你也可以直接在初始化 `Index` 对象时传入。
+当然，你也可以直接在初始化 `HintAPI` 对象时传入。
 
 ```python
-from hintapi import Index
+from hintapi import HintAPI
 
 from .app1.urls import routes as app1_routes
 
-app = Index(routes=app1_routes)
+app = HintAPI(routes=app1_routes)
 ```
 
 ### 路由组合
@@ -321,21 +297,14 @@ routes = Routes(..., namespace="namespace")
 
 ```python
 def one_http_middleware(endpoint):
-    async def wrapper():
-        return await endpoint()
-    return wrapper
-
-
-def one_socket_middleware(endpoint):
-    async def wrapper():
-        return await endpoint()
+    def wrapper():
+        return endpoint()
     return wrapper
 
 
 routes = Routes(
     ...,
     http_middlewares=[one_http_middleware],
-    socket_middlewares=[one_socket_middleware],
 )
 ```
 
@@ -347,15 +316,8 @@ routes = Routes(...)
 
 @routes.http_middleware
 def one_http_middleware(endpoint):
-    async def wrapper():
-        return await endpoint()
-    return wrapper
-
-
-@routes.socket_middleware
-def one_socket_middleware(endpoint):
-    async def wrapper():
-        return await endpoint()
+    def wrapper():
+        return endpoint()
     return wrapper
 ```
 
@@ -398,11 +360,11 @@ from hintapi.routing.extensions import FileRoutes
 
 #### 中间件定义
 
-`__init__.py` 中名为 `HTTPMiddleware` 的对象将被作为 HTTP 中间件、`SocketMiddleware` 将被作为 WebSocket 中间件，并作用于同目录下所有的路由。
+`__init__.py` 中名为 `HTTPMiddleware` 的对象将被作为 HTTP 中间件，并作用于同目录下所有的路由。
 
 #### 处理器定义
 
-除了 `__init__.py` 文件以外的 `.py` 文件中，名为 `HTTP` 的对象（任何可调用对象均可，函数、类等）将被视为 HTTP 处理器，名为 `Socket` 的对象（任何可调用对象均可，函数、类等）将被视为 WebSocket 处理器。
+除了 `__init__.py` 文件以外的 `.py` 文件中，名为 `HTTP` 的对象（任何可调用对象均可，函数、类等）将被视为 HTTP 处理器。
 
 #### 路由名称
 
@@ -430,23 +392,23 @@ from hintapi.routing.extensions import MultimethodRoutes
 `MultimethodRoutes` 是一个特殊的路由序列，它允许你使用如下方式注册路由，在不显式使用类的情况下拆分同一个 PATH 下的不同方法到多个函数中。除此之外，均与 `Routes` 相同。
 
 ```python
-from hintapi import Index
+from hintapi import HintAPI
 from hintapi.routing.extensions import MultimethodRoutes
 
 routes = MultimethodRoutes()
 
 
 @routes.http.get("/user")
-async def list_user():
+def list_user():
     pass
 
 
 @routes.http.post("/user")
-async def create_user():
+def create_user():
     pass
 
 
 @routes.http.delete("/user")
-async def delete_user():
+def delete_user():
     pass
 ```

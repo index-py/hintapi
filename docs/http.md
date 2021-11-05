@@ -7,27 +7,27 @@
 使用函数处理请求是很简单的。
 
 ```python
-from hintapi import Index
+from hintapi import HintAPI
 
-app = Index()
+app = HintAPI()
 
 
 @app.router.http("/hello")
-async def hello():
+def hello():
     return "hello"
 ```
 
 `@app.router.http` 装饰器将返回原始的函数，故而可以将同一个函数注册到多个路由下。
 
 ```python
-from hintapi import Index, request
+from hintapi import HintAPI, request
 
-app = Index()
+app = HintAPI()
 
 
 @app.router.http("/hello", name="hello")
 @app.router.http("/hello/{name}", name="hello-with-name")
-async def hello():
+def hello():
     if request.path_params:
         return f"hello {request.path_params['name']}"
     return "hello"
@@ -36,14 +36,14 @@ async def hello():
 你还可以使用 `required_method` 来约束函数处理器仅接受指定的请求方法。
 
 ```python
-from hintapi import Index, request, required_method
+from hintapi import HintAPI, request, required_method
 
-app = Index()
+app = HintAPI()
 
 
 @app.router.http("/hello")
 @required_method("POST")
-async def need_post():
+def need_post():
     return request.method
 ```
 
@@ -61,27 +61,27 @@ async def need_post():
     在继承类时覆盖类属性 `HTTP_METHOD_NAMES` 即可。
 
 ```python
-from hintapi import Index, request, HttpView
+from hintapi import HintAPI, request, HttpView
 
-app = Index()
+app = HintAPI()
 
 
 @app.router.http("/cat")
 class Cat(HttpView):
 
-    async def get(self):
+    def get(self):
         return request.method
 
-    async def post(self):
+    def post(self):
         return request.method
 
-    async def put(self):
+    def put(self):
         return request.method
 
-    async def patch(self):
+    def patch(self):
         return request.method
 
-    async def delete(self):
+    def delete(self):
         return request.method
 ```
 
@@ -146,32 +146,32 @@ class Cat(HttpView):
 
 有几种方法可以读到请求体内容：
 
-- `await request.body`：返回一个 `bytes`。
+- `request.body`：返回一个 `bytes`。
 
-- `await request.form`：将 `body` 作为表单进行解析并返回结果（多值字典）。
+- `request.form`：将 `body` 作为表单进行解析并返回结果（多值字典）。
 
-- `await request.json`：将 `body` 作为 JSON 字符串解析并返回结果。
+- `request.json`：将 `body` 作为 JSON 字符串解析并返回结果。
 
-- `await request.data()`：将 `body` 根据 `content_type` 提供的信息进行解析并返回。
+- `request.data()`：将 `body` 根据 `content_type` 提供的信息进行解析并返回。
 
-你也可以使用 `async for` 语法将 `body` 作为一个 `bytes` 流进行读取：
+你也可以使用 `for` 语法将 `body` 作为一个 `bytes` 流进行读取：
 
 ```python
-async def post():
+def post():
     ...
     body = b''
-    async for chunk in request.stream():
+    for chunk in request.stream():
         body += chunk
     ...
 ```
 
 如果你直接使用了 `request.stream()` 去读取数据，那么请求体将不会缓存在内存中。其后任何对 `.body`/`.form`/`.json` 的调用都将抛出错误。
 
-在某些情况下，例如长轮询或流式响应，你可能需要确定客户端是否已断开连接。可以使用 `disconnected = await request.is_disconnected()` 确定此状态。
+在某些情况下，例如长轮询或流式响应，你可能需要确定客户端是否已断开连接。可以使用 `disconnected = request.is_disconnected()` 确定此状态。
 
 ### Request Files
 
-通过 `await request.form` 可以解析通过 `multipart/form-data` 格式接收到的表单，包括文件。
+通过 `request.form` 可以解析通过 `multipart/form-data` 格式接收到的表单，包括文件。
 
 文件将被包装为 `starlette.datastructures.UploadFile` 对象，它有如下属性：
 
@@ -179,19 +179,19 @@ async def post():
 * `content_type: str`: 文件类型 (MIME type / media type) (例如 `image/jpeg`).
 * `file: tempfile.SpooledTemporaryFile`: 存储文件内容的临时文件（可以直接读写这个对象，但最好不要）。
 
-`UploadFile` 还有四个异步方法：
+`UploadFile` 还有四个方法：
 
-* `async write(data: Union[str, bytes])`: 写入数据到文件中。
-* `async read(size: int)`: 从文件中读取数据。
-* `async seek(offset: int)`: 文件指针跳转到指定位置。
-* `async close()`: 关闭文件。
+* `write(data: Union[str, bytes])`: 写入数据到文件中。
+* `read(size: int)`: 从文件中读取数据。
+* `seek(offset: int)`: 文件指针跳转到指定位置。
+* `close()`: 关闭文件。
 
 下面是一个读取原始文件名称和内容的例子：
 
 ```python
-form = await request.form
+form = request.form
 filename = form["upload_file"].filename
-contents = await form["upload_file"].read()
+contents = form["upload_file"].read()
 ```
 
 ### State
@@ -247,7 +247,7 @@ del request.state.user  # 删
 from hintapi import PlainTextResponse
 
 
-async def return_plaintext():
+def return_plaintext():
     return PlainTextResponse('Hello, world!')
 ```
 
@@ -259,7 +259,7 @@ async def return_plaintext():
 from hintapi import HTMLResponse
 
 
-async def return_html():
+def return_html():
     return HTMLResponse('<html><body><h1>Hello, world!</h1></body></html>')
 ```
 
@@ -271,7 +271,7 @@ async def return_html():
 from hintapi import JSONResponse
 
 
-async def return_json():
+def return_json():
     return JSONResponse({'hello': 'world'})
 ```
 
@@ -298,7 +298,7 @@ def custom_convert(obj):
     raise TypeError(f'Object of type {obj.__class__.__name__} is not JSON serializable')
 
 
-async def return_json():
+def return_json():
     return JSONResponse({'hello': 'world'}, default=custom_convert)
 ```
 
@@ -310,7 +310,7 @@ async def return_json():
 from hintapi import RedirectResponse
 
 
-async def return_redirect():
+def return_redirect():
     return RedirectResponse('/')
 ```
 
@@ -319,20 +319,20 @@ async def return_redirect():
 接受一个异步生成器，流式传输响应主体。
 
 ```python
-import asyncio
+import time
 
 from hintapi import StreamingResponse
 
 
-async def slow_numbers(minimum, maximum):
+def slow_numbers(minimum, maximum):
     yield('<html><body><ul>')
     for number in range(minimum, maximum + 1):
         yield '<li>%d</li>' % number
-        await asyncio.sleep(0.5)
+        time.sleep(0.5)
     yield('</ul></body></html>')
 
 
-async def return_stream(scope, receive, send):
+def return_stream(scope, receive, send):
     generator = slow_numbers(1, 10)
     return StreamingResponse(generator, content_type='text/html')
 ```
@@ -360,14 +360,14 @@ async def return_stream(scope, receive, send):
 hintapi 内置了对 Jinja2 模板的支持，只要你安装了 `jinja2` 模块，就能从 `hintapi.templates` 中导出 `Jinja2Templates`。以下是一个简单的使用样例，访问 "/" 它将从项目根目录下的 templates 目录寻找 homepage.html 文件进行渲染。
 
 ```python
-from hintapi import Index, TemplateResponse
+from hintapi import HintAPI, TemplateResponse
 from hintapi.http.templates import Jinja2Templates
 
-app = Index(templates=Jinja2Templates("templates"))
+app = HintAPI(templates=Jinja2Templates("templates"))
 
 
 @app.router.http("/")
-async def homepage():
+def homepage():
     return TemplateResponse("homepage.html")
 ```
 
@@ -386,19 +386,19 @@ async def homepage():
 如下是一个每隔一秒发送一条 hello 消息、一共发送一百零一条消息的样例。
 
 ```python
-import asyncio
+import time
 
-from hintapi import Index, SendEventResponse
+from hintapi import HintAPI, SendEventResponse
 
-app = Index()
+app = HintAPI()
 
 
 @app.router.http("/message")
-async def message():
+def message():
 
-    async def message_gen():
+    def message_gen():
         for i in range(101):
-            await asyncio.sleep(1)
+            time.sleep(1)
             yield {"id": i, "data": "hello"}
 
     return SendEventResponse(message_gen())
@@ -420,18 +420,18 @@ async def message():
 - `baize.datastructures.URL`：自动转换为 `RedirectResponse`
 
 ```python
-async def get_detail():
+def get_detail():
     return {"key": "value"}
 ```
 
 你还可以返回多个值来自定义 HTTP Status 和 HTTP Headers：
 
 ```python
-async def not_found():
+def not_found():
     return {"message": "Not found"}, 404
 
 
-async def no_content():
+def no_content():
     return "", 301, {"location": "https://hintapi.aber.sh"}
 ```
 
@@ -441,9 +441,9 @@ async def no_content():
 from dataclasses import dataclass, asdict
 from typing import Mapping
 
-from hintapi import Index, HttpResponse, JSONResponse
+from hintapi import HintAPI, HttpResponse, JSONResponse
 
-app = Index()
+app = HintAPI()
 
 
 @dataclass
@@ -462,9 +462,9 @@ def _error_json(error: Error, status: int = 400, headers: Mapping[str, str] = No
 
 ```python
 from typing import Mapping
-from hintapi import Index, HttpResponse
+from hintapi import HintAPI, HttpResponse
 
-app = Index()
+app = HintAPI()
 
 
 @app.response_convertor.register(tuple)
@@ -486,7 +486,7 @@ def _more_json(body, status: int = 200, headers: Mapping[str, str] = None) -> Ht
 from hintapi import HTTPException
 
 
-async def endpoint():
+def endpoint():
     ...
     raise HTTPException(400)
     ...
@@ -498,7 +498,7 @@ async def endpoint():
 from hintapi import HTTPException
 
 
-async def endpoint():
+def endpoint():
     ...
     raise HTTPException(405, headers={"Allow": "HEAD, GET, POST"})
     ...
@@ -514,36 +514,36 @@ async def endpoint():
 你可以捕捉指定的 HTTP 状态码，那么在应对包含对应 HTTP 状态码的 `HTTPException` 异常时，hintapi 会使用你定义的函数而不是默认行为。你也可以捕捉其他继承自 `Exception` 的异常，通过自定义函数，返回指定的内容给客户端。
 
 ```python
-from hintapi import Index, HTTPException, HttpResponse, PlainTextResponse
+from hintapi import HintAPI, HTTPException, HttpResponse, PlainTextResponse
 
-app = Index()
+app = HintAPI()
 
 
 @app.exception_handler(404)
-async def not_found(exc: HTTPException) -> HttpResponse:
+def not_found(exc: HTTPException) -> HttpResponse:
     return PlainTextResponse("what do you want to do?", status_code=404)
 
 
 @app.exception_handler(ValueError)
-async def value_error(exc: ValueError) -> HttpResponse:
+def value_error(exc: ValueError) -> HttpResponse:
     return PlainTextResponse("Something went wrong with the server.", status_code=500)
 ```
 
 除了装饰器注册，你同样可以使用列表式的注册方式，下例与上例等价：
 
 ```python
-from hintapi import Index, HTTPException, HttpResponse, PlainTextResponse
+from hintapi import HintAPI, HTTPException, HttpResponse, PlainTextResponse
 
 
-async def not_found(exc: HTTPException) -> HttpResponse:
+def not_found(exc: HTTPException) -> HttpResponse:
     return PlainTextResponse("what do you want to do?", status_code=404)
 
 
-async def value_error(exc: ValueError) -> HttpResponse:
+def value_error(exc: ValueError) -> HttpResponse:
     return PlainTextResponse("Something went wrong with the server.", status_code=500)
 
 
-app = Index(exception_handlers={
+app = HintAPI(exception_handlers={
     404: not_found,
     ValueError: value_error,
 })
