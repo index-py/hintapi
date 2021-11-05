@@ -50,7 +50,7 @@ def test_custom_application_response_converter():
     from dataclasses import asdict, dataclass
     from typing import Mapping
 
-    from hintapi import HttpResponse, JSONResponse, PlainTextResponse, HintAPI
+    from hintapi import HintAPI, HttpResponse, JSONResponse, PlainTextResponse
 
     @dataclass
     class Error:

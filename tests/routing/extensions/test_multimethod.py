@@ -92,7 +92,7 @@ def test_mulitmethodroutes_with_prefix():
 
 
 def test_mulitmethodroutes_with_parameters():
-    from hintapi import Path, HintAPI
+    from hintapi import HintAPI, Path
 
     routes = Routes()
 
