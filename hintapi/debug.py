@@ -204,16 +204,20 @@ class DebugMiddleware:
 
         exc: typing.Optional[BaseException] = None
 
-        def _start_response(
-            status: str,
-            response_headers: typing.List[typing.Tuple[str, str]],
-            exc_info: ExcInfo = None,
-        ) -> None:
-            nonlocal exc
-            exc = exc_info[1] if exc_info else None
-            start_response(status, response_headers, exc_info)
-
         try:
+
+            def _start_response(
+                status: str,
+                response_headers: typing.List[typing.Tuple[str, str]],
+                exc_info: ExcInfo = None,
+            ) -> None:
+                nonlocal exc
+                if exc_info is None:
+                    start_response(status, response_headers)
+                else:
+                    exc = exc_info[1]
+                    raise exc
+
             yield from self.app(environ, typing.cast(StartResponse, _start_response))
         except BaseException as e:
             exc = e

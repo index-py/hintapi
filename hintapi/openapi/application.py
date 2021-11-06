@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-import asyncio
 import copy
 import inspect
 import json
 import operator
+import time
 import typing
 from functools import reduce
 from hashlib import md5
@@ -237,7 +237,7 @@ class OpenAPI:
                     "data": json.dumps(openapi),
                 }
                 while not request.app.should_exit:
-                    asyncio.sleep(1)
+                    time.sleep(1)
 
             return g()
 
