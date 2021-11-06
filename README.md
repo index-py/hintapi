@@ -23,7 +23,7 @@
 </a>
 
 <a href="https://pepy.tech/project/hintapi">
-<img src="https://static.pepy.tech/personalized-badge/hintapi?period=total&units=international_system&left_color=black&right_color=blue&left_text=PyPi%20Downloads" alt="Downloads">
+<img src="https://static.pepy.tech/personalized-badge/hintapi?period=total&units=international_system&left_color=black&right_color=blue&left_text=PyPi-Downloads" alt="Downloads">
 </a>
 </p>
 
