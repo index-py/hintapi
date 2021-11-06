@@ -202,8 +202,6 @@ class DebugMiddleware:
         self, environ: Environ, start_response: StartResponse
     ) -> typing.Iterable[bytes]:
 
-        exc: typing.Optional[BaseException] = None
-
         try:
 
             def _start_response(
@@ -211,18 +209,13 @@ class DebugMiddleware:
                 response_headers: typing.List[typing.Tuple[str, str]],
                 exc_info: ExcInfo = None,
             ) -> None:
-                nonlocal exc
                 if exc_info is None:
                     start_response(status, response_headers)
                 else:
-                    exc = exc_info[1]
-                    raise exc
+                    raise exc_info[1].with_traceback(exc_info[2])
 
             yield from self.app(environ, typing.cast(StartResponse, _start_response))
-        except BaseException as e:
-            exc = e
-
-        if exc is not None:
+        except BaseException as exc:
             request = environ["app"].factory_class.http(environ)
             response = self.debug_response(request, exc)
             yield from response(environ, start_response)
