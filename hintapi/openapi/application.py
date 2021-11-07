@@ -42,9 +42,9 @@ class OpenAPI:
         *,
         tags: Dict[str, TagDetail] = {},
         template_name: Literal["redoc", "swagger", "rapidoc"] = "swagger",
-        template: str = "",
+        template: Optional[str] = None,
     ) -> None:
-        if template == "":
+        if not template:
             template = (
                 Path(__file__).absolute().parent / "templates" / f"{template_name}.html"
             ).read_text(encoding="utf8")
