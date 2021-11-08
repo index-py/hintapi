@@ -250,7 +250,7 @@ class OpenAPI:
 
         def heartbeat():
             openapi = self.create_docs(request)
-            
+
             def g():
                 yield {
                     "id": md5(json.dumps(openapi).encode()).hexdigest(),
