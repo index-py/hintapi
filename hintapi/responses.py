@@ -204,7 +204,7 @@ class SendEventResponse(baize_wsgi.SendEventResponse):
 
     def __call__(
         self, environ: Environ, start_response: StartResponse
-    ) -> Iterable[bytes]:
+    ) -> typing.Iterable[bytes]:
         start_response(
             baize_wsgi.StatusStringMapping[self.status_code],
             self.list_headers(as_bytes=False),
