@@ -122,7 +122,7 @@ class HintAPI:
             except NoMatchFound:
                 raise HTTPException(404)
             else:
-                return response(environ, start_response)
+                yield from response(environ, start_response)
         finally:
             request.close()
             request_var.reset(token)
