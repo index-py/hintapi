@@ -250,7 +250,7 @@ class OpenAPI:
 
         def heartbeat():
             def g():
-                while True:
+                while not request.app.should_exit:
                     openapi = self.create_docs(request)
                     yield {
                         "id": md5(json.dumps(openapi).encode()).hexdigest(),

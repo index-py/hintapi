@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextvars
 import typing
 from concurrent.futures import FIRST_COMPLETED
 from concurrent.futures import wait as wait_futures
@@ -11,8 +12,8 @@ from pydantic import BaseModel, create_model
 from pydantic.json import pydantic_encoder
 from pydantic.typing import display_as_type
 
-from .requests import request, request_var
-from .utils import safe_issubclass
+from .requests import request
+from .utils import F, safe_issubclass
 
 __all__ = [
     "convert_response",
@@ -210,10 +211,12 @@ class SendEventResponse(baize_wsgi.SendEventResponse):
             self.list_headers(as_bytes=False),
         )
 
+        context = contextvars.copy_context()
+
         future = self.thread_pool.submit(
             wait_futures,
             (
-                self.thread_pool.submit(self.send_event, request_var.get()),
+                self.thread_pool.submit(F(context.run, self.send_event)),
                 self.thread_pool.submit(self.keep_alive),
             ),
             return_when=FIRST_COMPLETED,
@@ -225,12 +228,6 @@ class SendEventResponse(baize_wsgi.SendEventResponse):
         finally:
             self.has_more_data = False
             future.cancel()
-
-    def send_event(self, k) -> None:
-        # Patch context in different thread
-        token = request_var.set(k)
-        super().send_event()
-        request_var.reset(token)
 
 
 class StreamResponse(baize_wsgi.StreamResponse):
