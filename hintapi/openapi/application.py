@@ -249,14 +249,13 @@ class OpenAPI:
             )
 
         def heartbeat():
-            openapi = self.create_docs(request)
-
             def g():
-                yield {
-                    "id": md5(json.dumps(openapi).encode()).hexdigest(),
-                    "data": json.dumps(openapi),
-                }
                 while True:
+                    openapi = self.create_docs(request)
+                    yield {
+                        "id": md5(json.dumps(openapi).encode()).hexdigest(),
+                        "data": json.dumps(openapi),
+                    }
                     time.sleep(1)
 
             return g()
