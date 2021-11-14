@@ -1,13 +1,12 @@
 import functools
 import re
-from typing import Any, Awaitable, Callable, Dict, Iterable, Pattern, TypeVar
+import typing
+from typing import Any, Callable, Dict, Iterable, Pattern, TypeVar
 
 from .. import request
 from ..responses import convert_response
 
-T = TypeVar("T")
-
-View = Callable[..., Awaitable[T]]
+_View = TypeVar("_View", bound=Callable)
 
 
 def allow_cors(
@@ -26,7 +25,7 @@ def allow_cors(
     expose_headers: Iterable[str] = (),
     allow_credentials: bool = False,
     max_age: int = 600,
-) -> Callable[[View], View]:
+) -> Callable[[_View], _View]:
     """
     Cross-Origin Resource Sharing
     """
@@ -43,7 +42,7 @@ def allow_cors(
     }
     config_dict = {k: v for k, v in config_dict.items() if v}
 
-    def decorator(endpoint: View) -> View:
+    def decorator(endpoint: _View) -> _View:
         @functools.wraps(endpoint)
         def cors_wrapper(*args: Any, **kwargs: Any) -> Any:
             origin = request.headers.get("origin", None)
@@ -57,7 +56,7 @@ def allow_cors(
             else:
                 return endpoint(*args, **kwargs)
 
-        return cors_wrapper
+        return typing.cast(_View, cors_wrapper)
 
     return decorator
 

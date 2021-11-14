@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+from baize.exceptions import HTTPException
+
 from .applications import HintAPI
-from .exceptions import HTTPException
 from .parameters.field_functions import (
     Body,
     Cookie,
