@@ -1,9 +1,8 @@
 from __future__ import annotations
 
 import contextvars
+import queue
 import typing
-from concurrent.futures import FIRST_COMPLETED
-from concurrent.futures import wait as wait_futures
 from http import HTTPStatus
 
 from baize import wsgi as baize_wsgi
@@ -212,19 +211,14 @@ class SendEventResponse(baize_wsgi.SendEventResponse):
         )
 
         context = contextvars.copy_context()
-
-        future = self.thread_pool.submit(
-            wait_futures,
-            (
-                self.thread_pool.submit(F(context.run, self.send_event)),
-                self.thread_pool.submit(self.keep_alive),
-            ),
-            return_when=FIRST_COMPLETED,
-        )
+        future = self.thread_pool.submit(F(context.run, self.send_event))
 
         try:
             while self.has_more_data or not self.queue.empty():
-                yield self.queue.get()
+                try:
+                    yield self.queue.get(timeout=self.ping_interval)
+                except queue.Empty:
+                    yield b": ping\n\n"
         finally:
             self.has_more_data = False
             future.cancel()
