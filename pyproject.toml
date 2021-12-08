@@ -25,7 +25,7 @@ repository = "https://github.com/abersheeran/hintapi"
 cli = ["click<9.0,>=8.0"]
 
 [project.scripts]
-index-cli = "hintapi.cli:index_cli"
+hintapi = "hintapi.cli:index_cli"
 
 [tool.isort]
 profile = "black"
