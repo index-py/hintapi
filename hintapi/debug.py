@@ -3,6 +3,7 @@ from __future__ import annotations
 import html
 import inspect
 import os
+import sys
 import traceback
 import typing
 
@@ -218,7 +219,10 @@ class DebugMiddleware:
         except BaseException as exc:
             request = environ["app"].factory_class.http(environ)
             response = self.debug_response(request, exc)
-            yield from response(environ, start_response)
+            _start_response_with_exc = F(start_response, ..., ..., sys.exc_info())
+            yield from response(
+                environ, typing.cast(StartResponse, _start_response_with_exc)
+            )
 
             raise exc
 
