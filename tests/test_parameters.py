@@ -51,7 +51,7 @@ def test_header():
     app = HintAPI()
 
     @app.router.http.get("/")
-    def header(name: Annotated[str, Header()]):
+    def header(name: Annotated[str, Header(alias="Name")]):
         return name
 
     with Client(app=app, base_url="http://localhost") as client:
