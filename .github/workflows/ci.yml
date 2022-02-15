@@ -67,17 +67,17 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - uses: pdm-project/setup-pdm@v2.5
+      - uses: pdm-project/setup-pdm@v2.6
         name: Setup Python and PDM
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
-          version: 1.9.0
+          version: 1.12.8
           enable-pep582: true # Enable PEP 582 package loading globally
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade twine
+          python -m pip install --upgrade twine pip
 
       - name: Build
         run: |
