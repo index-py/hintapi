@@ -206,7 +206,7 @@ class OpenAPI:
         openapi = copy.deepcopy(self.openapi)
         openapi["servers"] = [
             {
-                "url": f"{request.url.scheme}://{request.url.netloc}",
+                "url": "/",
                 "description": "Current server",
             },
             spec.Server(
@@ -256,7 +256,7 @@ class OpenAPI:
                         "id": md5(json.dumps(openapi).encode()).hexdigest(),
                         "data": json.dumps(openapi),
                     }
-                    time.sleep(1)
+                    time.sleep(60)
 
             return g()
 
