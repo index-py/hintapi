@@ -21,7 +21,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pdm install -dG docs
+          pdm sync -dG docs
           pip install mkdocs-version
       - name: Generate document
         run: |
