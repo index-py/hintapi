@@ -14,10 +14,10 @@
         let version = null;
         const evtSource = new EventSource("./heartbeat");
         evtSource.onmessage = function (event) {
-            if (event.id === version) {
+            if (event.lastEventId === version) {
                 return
             }
-            version = event.id;
+            version = event.lastEventId;
             const spec = JSON.parse(event.data);
 
             SwaggerUIBundle({
