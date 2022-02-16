@@ -96,6 +96,12 @@ def test_openapi_page():
     assert response.status_code == 200
     assert len(response.headers["hash"]) == 32
 
+    # Check Auto Reload
+    assert response.headers.get("reload") == "true"
+    openapi.reload = False
+    assert client.get("/docs/json").headers["reload"] == "false"
+    openapi.reload = True
+
     openapi_docs_text = response.text
     assert json.loads(openapi_docs_text) == {
         "openapi": "3.0.3",
