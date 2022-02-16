@@ -22,6 +22,7 @@ repository = "https://github.com/abersheeran/hintapi"
 
 [project.optional-dependencies]
 cli = ["click<9.0,>=8.0"]
+serve = ["waitress>=2.0.0", "hupper"]
 
 [project.scripts]
 hintapi = "hintapi.cli:index_cli"
