@@ -4,6 +4,7 @@ import copy
 import inspect
 import json
 import operator
+import os
 import time
 import typing
 from functools import reduce
@@ -43,6 +44,7 @@ class OpenAPI:
         tags: Dict[str, TagDetail] = {},
         template_name: Literal["redoc", "swagger", "rapidoc"] = "swagger",
         template: Optional[str] = None,
+        reload: Optional[bool] = None,
     ) -> None:
         if not template:
             template = (
@@ -50,6 +52,7 @@ class OpenAPI:
             ).read_text(encoding="utf8")
 
         self.html_template = template
+        self.reload = reload
 
         self.openapi = spec.OpenAPI(
             openapi="3.0.3",
@@ -245,7 +248,10 @@ class OpenAPI:
         def json_docs():
             openapi = self.create_docs(request)
             return JSONResponse(
-                openapi, headers={"hash": md5(json.dumps(openapi).encode()).hexdigest()}
+                openapi, headers={
+                    "hash": md5(json.dumps(openapi).encode()).hexdigest(),
+                    "reload": str(self.reload).lower(),
+                }
             )
 
         def heartbeat():
