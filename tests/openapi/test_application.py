@@ -328,7 +328,7 @@ def test_openapi_page():
             }
         },
         "servers": [
-            {"url": "http://localhost", "description": "Current server"},
+            {"url": "/", "description": "Current server"},
             dict(
                 url="{scheme}://{address}/",
                 description="Custom API Server Host",
