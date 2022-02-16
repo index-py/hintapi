@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
+import sys
 
 import click
 
@@ -26,6 +27,8 @@ LOGGING_LEVELS = {
 
 def _serve(application: str, bind: str, log_level: str) -> None:
     import waitress
+
+    sys.path.insert(0, os.getcwd())
 
     wsgi_app = import_from_string(application)
 
