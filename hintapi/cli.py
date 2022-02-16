@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-import os
 import logging
+import os
 
 import click
 
 from .__version__ import __version__
 from .routing.commands import display_urls
-from .utils import import_module, import_from_string, F
+from .utils import F, import_from_string, import_module
 
 
 @click.group(help=f"HintAPI {__version__}")
