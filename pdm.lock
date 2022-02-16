@@ -140,6 +140,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "hupper"
+version = "1.10.3"
+requires_python = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
+summary = "Integrated process monitor for developing and reloading daemons."
+
+[[package]]
 name = "idna"
 version = "3.3"
 requires_python = ">=3.5"
@@ -262,7 +268,7 @@ dependencies = [
     "ghp-import>=1.0",
     "importlib-metadata>=3.10",
     "mergedeep>=1.3.4",
-    "mkdocs<2.0.0,>=1.2.1",
+    "mkdocs==1.2.3",
     "packaging>=20.5",
     "pyyaml-env-tag>=0.1",
     "watchdog>=2.0",
@@ -297,7 +303,6 @@ dependencies = [
 [[package]]
 name = "pathspec"
 version = "0.9.0"
-requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 summary = "Utility library for gitignore style pattern matching of file paths."
 
 [[package]]
@@ -432,7 +437,7 @@ extras = ["idna2008"]
 summary = "Validating URI References per RFC 3986"
 dependencies = [
     "idna",
-    "rfc3986<2,>=1.3",
+    "rfc3986==1.5.0",
 ]
 
 [[package]]
@@ -475,6 +480,12 @@ version = "3.10.0.2"
 summary = "Backported and Experimental Type Hints for Python 3.5+"
 
 [[package]]
+name = "waitress"
+version = "2.0.0"
+requires_python = ">=3.6.0"
+summary = "Waitress WSGI server"
+
+[[package]]
 name = "watchdog"
 version = "2.1.6"
 requires_python = ">=3.6"
@@ -488,7 +499,7 @@ summary = "Backport of pathlib-compatible object wrapper for zip files"
 
 [metadata]
 lock_version = "3.1"
-content_hash = "sha256:39b4e081901ff1f1512e770cdb23d3893aa16d765dbe07155e8ccc51bd03ea57"
+content_hash = "sha256:d1972a67651a98aa15a85fb0fe1445b2472025737166f011c955c82f897b24a7"
 
 [metadata.files]
 "anyio 3.4.0" = [
@@ -612,6 +623,10 @@ content_hash = "sha256:39b4e081901ff1f1512e770cdb23d3893aa16d765dbe07155e8ccc51b
 "httpx 0.21.1" = [
     {file = "httpx-0.21.1-py3-none-any.whl", hash = "sha256:208e5ef2ad4d105213463cfd541898ed9d11851b346473539a8425e644bb7c66"},
     {file = "httpx-0.21.1.tar.gz", hash = "sha256:02af20df486b78892a614a7ccd4e4e86a5409ec4981ab0e422c579a887acad83"},
+]
+"hupper 1.10.3" = [
+    {file = "hupper-1.10.3-py2.py3-none-any.whl", hash = "sha256:f683850d62598c02faf3c7cdaaa727d8cbe3c5a2497a5737a8358386903b2601"},
+    {file = "hupper-1.10.3.tar.gz", hash = "sha256:cd6f51b72c7587bc9bce8a65ecd025a1e95f1b03284519bfe91284d010316cd9"},
 ]
 "idna 3.3" = [
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
@@ -939,6 +954,10 @@ content_hash = "sha256:39b4e081901ff1f1512e770cdb23d3893aa16d765dbe07155e8ccc51b
     {file = "typing_extensions-3.10.0.2-py2-none-any.whl", hash = "sha256:d8226d10bc02a29bcc81df19a26e56a9647f8b0a6d4a83924139f4a8b01f17b7"},
     {file = "typing_extensions-3.10.0.2-py3-none-any.whl", hash = "sha256:f1d25edafde516b146ecd0613dabcc61409817af4766fbbcfb8d1ad4ec441a34"},
     {file = "typing_extensions-3.10.0.2.tar.gz", hash = "sha256:49f75d16ff11f1cd258e1b988ccff82a3ca5570217d7ad8c5f48205dd99a677e"},
+]
+"waitress 2.0.0" = [
+    {file = "waitress-2.0.0-py3-none-any.whl", hash = "sha256:29af5a53e9fb4e158f525367678b50053808ca6c21ba585754c77d790008c746"},
+    {file = "waitress-2.0.0.tar.gz", hash = "sha256:69e1f242c7f80273490d3403c3976f3ac3b26e289856936d1f620ed48f321897"},
 ]
 "watchdog 2.1.6" = [
     {file = "watchdog-2.1.6-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:9693f35162dc6208d10b10ddf0458cc09ad70c30ba689d9206e02cd836ce28a3"},
