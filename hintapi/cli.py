@@ -48,43 +48,54 @@ def _serve(application: str, bind: str, log_level: str) -> None:
     waitress.serve(wsgi_app, **bind_config)
 
 
-@index_cli.command(help="Use waitress to serve hintapi application")
-@click.option(
-    "--bind",
-    default="127.0.0.1:4190",
-    show_default=True,
-    help="A string of the form: HOST:PORT, unix:PATH.",
-)
-@click.option(
-    "--log-level",
-    type=click.Choice(["critical", "error", "warning", "info", "debug"]),
-    default="info",
-    show_default=True,
-)
-@click.option(
-    "--autoreload/--no-autoreload",
-    default=True,
-    show_default=True,
-    help="Reload the application on python module changes",
-)
-@click.argument("application")
-def serve(autoreload: bool, application: str, bind: str, log_level: str) -> None:
-    import hupper
+try:
+    import waitress
 
-    if autoreload:
-        # start_reloader will only return in a monitored subprocess
-        reloader = hupper.start_reloader(
-            "hintapi.cli._serve",
-            worker_kwargs={
-                "application": application,
-                "bind": bind,
-                "log_level": log_level,
-            },
-        )
-        # monitor an extra file
-        reloader.watch_files([".env"])
+    del waitress
+except ImportError:
+    pass
+else:
 
-    _serve(application, bind, log_level)
+    @index_cli.command(help="Use waitress to serve hintapi application")
+    @click.option(
+        "--bind",
+        default="127.0.0.1:4190",
+        show_default=True,
+        help="A string of the form: HOST:PORT, unix:PATH",
+    )
+    @click.option(
+        "--log-level",
+        type=click.Choice(["critical", "error", "warning", "info", "debug"]),
+        default="info",
+        show_default=True,
+    )
+    @click.option(
+        "--autoreload/--no-autoreload",
+        default=True,
+        show_default=True,
+        help="Reload the application on python module changes",
+    )
+    @click.argument("application")
+    def serve(autoreload: bool, application: str, bind: str, log_level: str) -> None:
+        if autoreload:
+            try:
+                import hupper
+            except ImportError:
+                raise RuntimeError("You need to install `hupper` to use autoreload")
+
+            # start_reloader will only return in a monitored subprocess
+            reloader = hupper.start_reloader(
+                "hintapi.cli._serve",
+                worker_kwargs={
+                    "application": application,
+                    "bind": bind,
+                    "log_level": log_level,
+                },
+            )
+            # monitor an extra file
+            reloader.watch_files([".env"])
+
+        _serve(application, bind, log_level)
 
 
 index_cli.add_command(display_urls, "display-urls")
