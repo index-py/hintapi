@@ -6,7 +6,8 @@ import typing
 from http import HTTPStatus
 
 from baize import wsgi as baize_wsgi
-from baize.typing import Environ, StartResponse
+from baize.typing import Environ, ServerSentEvent, StartResponse
+from baize.wsgi.responses import StatusStringMapping
 from pydantic import BaseModel, create_model
 from pydantic.json import pydantic_encoder
 from pydantic.typing import display_as_type
@@ -29,7 +30,6 @@ __all__ = [
 ]
 
 HttpResponse = baize_wsgi.Response
-ServerSentEvent = baize_wsgi.ServerSentEvent
 
 
 class JSONResponse(baize_wsgi.JSONResponse):
@@ -206,7 +206,7 @@ class SendEventResponse(baize_wsgi.SendEventResponse):
         self, environ: Environ, start_response: StartResponse
     ) -> typing.Iterable[bytes]:
         start_response(
-            baize_wsgi.StatusStringMapping[self.status_code],
+            StatusStringMapping[self.status_code],
             self.list_headers(as_bytes=False),
         )
 
