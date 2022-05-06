@@ -34,6 +34,7 @@ nav:
   - 路由: route.md
   - Http: "http.md"
   - 注入参数: "parameters.md"
+  - 命令: "command.md"
 
 markdown_extensions:
   - admonition
