@@ -321,7 +321,7 @@ def return_redirect():
 ```python
 import time
 
-from hintapi import StreamingResponse
+from hintapi import StreamResponse
 
 
 def slow_numbers(minimum, maximum):
@@ -334,7 +334,7 @@ def slow_numbers(minimum, maximum):
 
 def return_stream(scope, receive, send):
     generator = slow_numbers(1, 10)
-    return StreamingResponse(generator, content_type='text/html')
+    return StreamResponse(generator, content_type='text/html')
 ```
 
 ### FileResponse
