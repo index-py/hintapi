@@ -24,9 +24,9 @@ def Path(
     default: Any = Undefined,
     *,
     default_factory: Optional[NoArgAnyCallable] = None,
-    alias: str = None,
-    title: str = None,
-    description: str = None,
+    alias: Optional[str] = None,
+    title: Optional[str] = None,
+    description: Optional[str] = None,
     exclusive: bool = False,
     **extra: Any,
 ) -> Any:
@@ -60,9 +60,9 @@ def Query(
     default: Any = Undefined,
     *,
     default_factory: Optional[NoArgAnyCallable] = None,
-    alias: str = None,
-    title: str = None,
-    description: str = None,
+    alias: Optional[str] = None,
+    title: Optional[str] = None,
+    description: Optional[str] = None,
     exclusive: bool = False,
     **extra: Any,
 ) -> Any:
@@ -96,9 +96,9 @@ def Header(
     default: Any = Undefined,
     *,
     default_factory: Optional[NoArgAnyCallable] = None,
-    alias: str = None,
-    title: str = None,
-    description: str = None,
+    alias: Optional[str] = None,
+    title: Optional[str] = None,
+    description: Optional[str] = None,
     exclusive: bool = False,
     **extra: Any,
 ) -> Any:
@@ -132,9 +132,9 @@ def Cookie(
     default: Any = Undefined,
     *,
     default_factory: Optional[NoArgAnyCallable] = None,
-    alias: str = None,
-    title: str = None,
-    description: str = None,
+    alias: Optional[str] = None,
+    title: Optional[str] = None,
+    description: Optional[str] = None,
     exclusive: bool = False,
     **extra: Any,
 ) -> Any:
@@ -168,9 +168,9 @@ def Body(
     default: Any = Undefined,
     *,
     default_factory: Optional[NoArgAnyCallable] = None,
-    alias: str = None,
-    title: str = None,
-    description: str = None,
+    alias: Optional[str] = None,
+    title: Optional[str] = None,
+    description: Optional[str] = None,
     exclusive: bool = False,
     **extra: Any,
 ) -> Any:
@@ -204,7 +204,7 @@ def Request(
     default: Any = Undefined,
     *,
     default_factory: Optional[NoArgAnyCallable] = None,
-    alias: str = None,
+    alias: Optional[str] = None,
 ) -> Any:
     """
     Used to provide extra information about a field.

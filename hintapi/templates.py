@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABCMeta, abstractmethod
-from typing import Any, List, Mapping, Union
+from typing import Any, List, Mapping, Union, Optional
 
 from baize.wsgi import SmallResponse
 
@@ -16,9 +16,9 @@ class BaseTemplates(metaclass=ABCMeta):
         name: str,
         context: Mapping[str, Any],
         status_code: int = 200,
-        headers: Mapping[str, str] = None,
-        media_type: str = None,
-        charset: str = None,
+        headers: Optional[Mapping[str, str]] = None,
+        media_type: Optional[str] = None,
+        charset: Optional[str] = None,
     ) -> HttpResponse:
         """
         The subclass must override this method and return
@@ -42,9 +42,9 @@ else:
             name: str,
             context: Mapping[str, Any],
             status_code: int = 200,
-            headers: Mapping[str, str] = None,
-            media_type: str = None,
-            charset: str = None,
+            headers: Optional[Mapping[str, str]] = None,
+            media_type: Optional[str] = None,
+            charset: Optional[str] = None,
         ):
             self.env = env
             self.template = self.env.get_template(name)
@@ -93,9 +93,9 @@ else:
             name: str,
             context: Mapping[str, Any],
             status_code: int = 200,
-            headers: Mapping[str, str] = None,
-            media_type: str = None,
-            charset: str = None,
+            headers: Optional[Mapping[str, str]] = None,
+            media_type: Optional[str] = None,
+            charset: Optional[str] = None,
         ) -> _Jinja2TemplateResponse:
             return _Jinja2TemplateResponse(
                 self.env,

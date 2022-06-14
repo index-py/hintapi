@@ -37,7 +37,7 @@ class JSONResponse(baize_wsgi.JSONResponse):
         self,
         content: typing.Any,
         status_code: int = 200,
-        headers: typing.Mapping[str, str] = None,
+        headers: typing.Optional[typing.Mapping[str, str]] = None,
         **kwargs: typing.Any,
     ) -> None:
         json_kwargs: typing.Dict[str, typing.Any] = {
@@ -256,9 +256,9 @@ def TemplateResponse(
     name: str,
     context: typing.Mapping[str, typing.Any],
     status_code: int = 200,
-    headers: typing.Mapping[str, str] = None,
-    media_type: str = None,
-    charset: str = None,
+    headers: typing.Optional[typing.Mapping[str, str]] = None,
+    media_type: typing.Optional[str] = None,
+    charset: typing.Optional[str] = None,
 ) -> HttpResponse:
     templates = request.app.templates
     if templates is None:

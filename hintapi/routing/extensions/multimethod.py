@@ -16,7 +16,7 @@ class MultimethodRoutes(Routes):
         self,
         *iterable: typing.Union[BaseRoute, typing.Iterable[BaseRoute]],
         namespace: str = "",
-        tags: typing.Iterable[str] = None,
+        tags: typing.Optional[typing.Iterable[str]] = None,
         http_middlewares: typing.Sequence[typing.Any] = [],
         socket_middlewares: typing.Sequence[typing.Any] = [],
         base_class: typing.Type[HttpView] = HttpView,

@@ -44,9 +44,9 @@ class HttpRegister:
         *,
         name: typing.Optional[str] = "",
         middlewares: typing.Iterable[typing.Callable[[View], View]] = [],
-        summary: str = None,
-        description: str = None,
-        tags: typing.Iterable[str] = None,
+        summary: typing.Optional[str] = None,
+        description: typing.Optional[str] = None,
+        tags: typing.Optional[typing.Iterable[str]] = None,
     ) -> typing.Callable[[View], View]:
         """
         if method == "any", all request method would be allowed.
@@ -72,9 +72,9 @@ class HttpRegister:
         *,
         name: typing.Optional[str] = "",
         middlewares: typing.Iterable[typing.Callable[[View], View]] = [],
-        summary: str = None,
-        description: str = None,
-        tags: typing.Iterable[str] = None,
+        summary: typing.Optional[str] = None,
+        description: typing.Optional[str] = None,
+        tags: typing.Optional[typing.Iterable[str]] = None,
     ) -> typing.Callable[[View], View]:
         """
         shortcut for `self << HttpRoute(path, endpoint, name)`
@@ -101,9 +101,9 @@ class HttpRegister:
         *,
         name: typing.Optional[str] = "",
         middlewares: typing.Iterable[typing.Callable[[View], View]] = [],
-        summary: str = None,
-        description: str = None,
-        tags: typing.Iterable[str] = None,
+        summary: typing.Optional[str] = None,
+        description: typing.Optional[str] = None,
+        tags: typing.Optional[typing.Iterable[str]] = None,
     ) -> typing.Callable[[View], View]:
         """
         shortcut for `self << HttpRoute(path, endpoint, name) @ required_method("GET")`
@@ -130,9 +130,9 @@ class HttpRegister:
         *,
         name: typing.Optional[str] = "",
         middlewares: typing.Iterable[typing.Callable[[View], View]] = [],
-        summary: str = None,
-        description: str = None,
-        tags: typing.Iterable[str] = None,
+        summary: typing.Optional[str] = None,
+        description: typing.Optional[str] = None,
+        tags: typing.Optional[typing.Iterable[str]] = None,
     ) -> typing.Callable[[View], View]:
         """
         shortcut for `self << HttpRoute(path, endpoint, name) @ required_method("POST")`
@@ -159,9 +159,9 @@ class HttpRegister:
         *,
         name: typing.Optional[str] = "",
         middlewares: typing.Iterable[typing.Callable[[View], View]] = [],
-        summary: str = None,
-        description: str = None,
-        tags: typing.Iterable[str] = None,
+        summary: typing.Optional[str] = None,
+        description: typing.Optional[str] = None,
+        tags: typing.Optional[typing.Iterable[str]] = None,
     ) -> typing.Callable[[View], View]:
         """
         shortcut for `self << HttpRoute(path, endpoint, name) @ required_method("PUT")`
@@ -188,9 +188,9 @@ class HttpRegister:
         *,
         name: typing.Optional[str] = "",
         middlewares: typing.Iterable[typing.Callable[[View], View]] = [],
-        summary: str = None,
-        description: str = None,
-        tags: typing.Iterable[str] = None,
+        summary: typing.Optional[str] = None,
+        description: typing.Optional[str] = None,
+        tags: typing.Optional[typing.Iterable[str]] = None,
     ) -> typing.Callable[[View], View]:
         """
         shortcut for `self << HttpRoute(path, endpoint, name) @ required_method("PATCH")`
@@ -217,9 +217,9 @@ class HttpRegister:
         *,
         name: typing.Optional[str] = "",
         middlewares: typing.Iterable[typing.Callable[[View], View]] = [],
-        summary: str = None,
-        description: str = None,
-        tags: typing.Iterable[str] = None,
+        summary: typing.Optional[str] = None,
+        description: typing.Optional[str] = None,
+        tags: typing.Optional[typing.Iterable[str]] = None,
     ) -> typing.Callable[[View], View]:
         """
         shortcut for `self << HttpRoute(path, endpoint, name) @ required_method("DELETE")`
@@ -303,7 +303,7 @@ class Routes(typing.Sequence[BaseRoute], RouteRegisterMixin):
         self,
         *iterable: typing.Union[BaseRoute, typing.Iterable[BaseRoute]],
         namespace: str = "",
-        tags: typing.Iterable[str] = None,
+        tags: typing.Optional[typing.Iterable[str]] = None,
         http_middlewares: typing.Sequence[typing.Any] = [],
         socket_middlewares: typing.Sequence[typing.Any] = [],
     ) -> None:
