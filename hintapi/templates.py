@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABCMeta, abstractmethod
-from typing import Any, List, Mapping, Union, Optional
+from typing import Any, List, Mapping, Optional, Union
 
 from baize.wsgi import SmallResponse
 
