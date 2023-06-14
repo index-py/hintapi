@@ -1,3 +1,5 @@
+MERGE TO https://github.com/abersheeran/kui
+
 <div align="center">
 
 <h1>Hint API</h1>
